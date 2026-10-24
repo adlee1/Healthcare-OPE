@@ -1,6 +1,6 @@
 # Reproduction guide
 
-There are two separate workflows: data-free inspection of published aggregate results, and clinical baseline reproduction using an authorized restricted local bundle. A plain Git clone supports the first workflow only.
+There are two separate workflows: data-free inspection of the repository's aggregate results, and clinical baseline reproduction using the complete restricted bundle from the private Release. A plain Git clone supports the first workflow only; eligible members must download the Release assets separately for clinical reproduction.
 
 ## Environment and data-free checks
 
@@ -19,16 +19,38 @@ python plot_results.py --output outputs/figures
 
 The tests use synthetic inputs. Plotting reads shipped aggregate metrics and writes PNG, PDF, and SVG figures. Neither operation requires clinical data or credentials. Dependency installation may access a package index; for an entirely offline environment, prepare compatible wheels in advance. The reproduction runner itself makes no network or database calls.
 
-## Attach a restricted local bundle
+## Download and verify the private Release bundle
 
-First follow [DATA_ACCESS.md](DATA_ACCESS.md). Keep the authorized bundle and its outputs outside the Git checkout. Set the following variables to existing approved local storage locations:
+First follow [DATA_ACCESS.md](DATA_ACCESS.md). On **2026-10-24**, the repository owner confirmed permission for this private Release distribution. The authorization basis is owner confirmation, with no independent documentary verification. Download is limited to qualified members covered by that permission.
+
+Use a GitHub CLI session authenticated as an authorized repository member. Keep the bundle and its outputs outside the Git checkout. Replace `/approved/storage/Healthcare-OPE` below with an approved local storage location:
 
 ```bash
-APRIL_BUNDLE="/approved/storage/APRIL_selected_baselines_20261023"
-APRIL_RESULTS="/approved/storage/Healthcare-OPE-results"
+APRIL_STORAGE="/approved/storage/Healthcare-OPE"
+APRIL_DOWNLOADS="$APRIL_STORAGE/downloads/baseline-data-2026-10-24"
+APRIL_BUNDLE="$APRIL_STORAGE/APRIL_selected_baselines_20261023"
+APRIL_RESULTS="$APRIL_STORAGE/results"
+mkdir -p "$APRIL_DOWNLOADS"
+
+gh release download baseline-data-2026-10-24 \
+  --repo adlee1/Healthcare-OPE \
+  --pattern APRIL_selected_baselines_20261023_English.zip \
+  --pattern APRIL_selected_baselines_20261023_English.zip.sha256 \
+  --dir "$APRIL_DOWNLOADS" &&
+
+(
+  cd "$APRIL_DOWNLOADS" &&
+  shasum -a 256 -c APRIL_selected_baselines_20261023_English.zip.sha256
+) &&
+
+unzip "$APRIL_DOWNLOADS/APRIL_selected_baselines_20261023_English.zip" \
+  -d "$APRIL_STORAGE" &&
+python "$APRIL_BUNDLE/verify_package.py"
 ```
 
-The paths above illustrate the required locations; they are not download destinations. A valid bundle contains its original `cases.json`, unchanged numerical sources, and the bound data artifacts. The original `cases.json` is not distributed in the GitHub repository; a data-free case description cannot replace that index or the missing inputs.
+The ZIP is **315,005,272 bytes**, with SHA256 **`886a6596ed255c863ade7094ec07e1a96c37cd81b7a47485e1c88fdc28ee16c2`**. Continue only after the archive checksum succeeds and `verify_package.py` reports `passed`. Extract into a new location; do not overwrite an existing bundle or experiment outputs. The internal root remains `APRIL_selected_baselines_20261023`.
+
+A valid bundle contains its original `cases.json`, unchanged numerical sources, and the bound data artifacts. The index and restricted inputs are supplied in the private Release archive, not the Git tree. A data-free case description cannot replace them. If an authorized copy is already available in approved local storage, verify it and set `APRIL_BUNDLE` to that directory instead of downloading again.
 
 The available case IDs are:
 

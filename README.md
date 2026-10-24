@@ -4,7 +4,7 @@ An independent implementation and partial empirical reproduction of [APRIL: Anno
 
 The implementation compares the direct method (DM) with DM+, which augments a linear reward model with counterfactual rewards obtained by converting LLM predictions of post-treatment laboratory values through a fixed reward function. It retains a single-step contextual bandit formulation and evaluates policy-value estimates against an observed-reward reference.
 
-**This GitHub repository contains code, synthetic tests, and aggregate results. It does not contain restricted clinical inputs, annotation caches, fitted patient-data models, or patient bootstrap draws. A clone can run tests and render aggregate figures; both `cached` and `fresh` clinical reproduction require a separately authorized local data bundle.** See [data access](docs/DATA_ACCESS.md).
+**The Git checkout contains code, synthetic tests, and aggregate results. The complete restricted reproduction bundle is provided separately as an attachment to the [private baseline-data release](https://github.com/adlee1/Healthcare-OPE/releases/tag/baseline-data-2026-10-24).** A clone can run tests and render aggregate figures; both `cached` and `fresh` clinical reproduction require downloading and extracting that bundle. Access is limited to appropriately authorized collaborators covered by the repository owner's confirmed permission. See [data access](docs/DATA_ACCESS.md).
 
 ## Selected development baselines
 
@@ -39,6 +39,18 @@ python plot_results.py --output outputs/figures
 Plotting renders shipped aggregate values; it does not recompute patient-bootstrap statistics. Clinical reproduction commands, dependency details, and restart instructions are in [REPRODUCTION.md](docs/REPRODUCTION.md).
 
 The initial repository snapshot passed all 283 synthetic tests. The numerical source modules and portable reproduction runner are unchanged from the frozen local baseline bundle.
+
+## Download the complete reproduction bundle
+
+Authorized collaborators can open the [private release](https://github.com/adlee1/Healthcare-OPE/releases/tag/baseline-data-2026-10-24) while signed in to GitHub and download these attachments:
+
+- `APRIL_selected_baselines_20261023_English.zip` (315,005,272 bytes; approximately 315 MB).
+- `APRIL_selected_baselines_20261023_English.zip.sha256` (archive checksum).
+- `baseline-data-manifest.json` (bundle scope and verification metadata).
+
+Download the named ZIP attachment, rather than GitHub's automatically generated **Source code** archives, which contain only the Git checkout. Extract the bundle outside this checkout. It includes the clinical features, fixed patient splits, annotation caches, fitted baseline models, and saved bootstrap draws needed for the two selected cases. The bundle preserves the original two-provider point artifacts across their task/split combinations; it is not a complete five-provider raw-data archive.
+
+Follow [REPRODUCTION.md](docs/REPRODUCTION.md) to verify the archive and run cached reconstruction or fresh fitting. These workflows do not need the original PostgreSQL server or new paid LLM calls. Keep the repository private; the restricted bundle must not be redistributed beyond the applicable permission.
 
 ## Repository guide
 

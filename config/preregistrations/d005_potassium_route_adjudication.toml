@@ -1,0 +1,154 @@
+schema_version = 1
+component_id = "D005-K-ROUTE-ADJUDICATION-v2"
+decision_id = "D005"
+status = "proposed"
+execution_status = "not_executed"
+rule_version = "k-route-exact-value-adjudication-v2-proposed"
+specified_on = "2026-10-12"
+scope = "Private exact-value human review for the three potassium route fields"
+
+[boundary]
+database_access_allowed = false
+external_api_allowed = false
+input_is_only_audited_mapping_preflight_private_route_values = true
+product_or_event_mapping_allowed = false
+source_policy_decision_allowed = false
+formal_action_episode_label_or_cohort_allowed = false
+automatic_lexical_or_fuzzy_classification_allowed = false
+normalization_allowed = false
+query202_unlock_allowed = false
+formal_route_mapping_freeze_allowed = false
+
+[input]
+artifact_directory = "artifacts/profiling/20261011T190426.934406Z"
+manifest_file = "manifest.json"
+manifest_sha256 = "bdfcb78849eadb1b9eafca226fe49c7e70390f45ee0f3ef34c8e92899557c880"
+audit_file = "audit-summary.json"
+audit_sha256 = "c96b7bed50a7b29ac7f8bfc14ed05b03394ad3c996d2c4b2c891ccbf964d024e"
+private_values_file = "potassium_mapping_preflight.private-values.json"
+private_values_sha256 = "82e7d89cca2d756d5af85c038618f880fb88c378ee8b271e43181989faabcc83"
+aggregate_summary_file = "potassium_mapping_preflight.aggregate-summary.json"
+aggregate_summary_sha256 = "079a8b774773a039977d21aad88e128d0d3658483268ded38aa931842fa2a220"
+preflight_component_id = "D005-K-MAPPING-PREFLIGHT-v1"
+preflight_config_sha256 = "fb4b2b62dd7c3f225a639b364dea8e9abdadc94657409311e64e21ce6da3dd2e"
+preflight_audit_status_required = "passed"
+preflight_audit_failures_required = 0
+
+[[route_source]]
+source_key = "emar_detail_route"
+source_field = "mimiciv_hosp.emar_detail.route"
+field_role = "direct_detail_route"
+typed_distinct_values = 18
+nonnull_distinct_values = 17
+typed_set_sha256 = "a3b0d5664ae2e89f08df97f45347a6d7ae7761cdb2d138da781681ed2edd0ea9"
+
+[[route_source]]
+source_key = "pharmacy_route"
+source_field = "mimiciv_hosp.pharmacy.route"
+field_role = "auxiliary_pharmacy_route"
+typed_distinct_values = 109
+nonnull_distinct_values = 108
+typed_set_sha256 = "2dad858bbbd41002d3a417faa302bda9bd0f85111d47cbd075a0802886ebd76b"
+
+[[route_source]]
+source_key = "prescriptions_route"
+source_field = "mimiciv_hosp.prescriptions.route"
+field_role = "auxiliary_prescriptions_route"
+typed_distinct_values = 109
+nonnull_distinct_values = 108
+typed_set_sha256 = "b75209f1e0acea76a8c9818936b389a972def151317ede76073fc51dd65f1c0e"
+
+[cardinality]
+source_specific_typed_memberships = 236
+source_specific_nonnull_memberships = 233
+source_specific_sql_null_memberships = 3
+canonical_exact_nonnull_values = 117
+sql_null_requires_human_review = false
+
+[review_contract]
+allowed_decisions = ["iv", "noniv", "unknown"]
+default_decision = "unknown"
+allowed_review_statuses = ["unreviewed", "reviewed"]
+unreviewed_decision_must_equal_default = true
+reviewed_entry_requires_reviewer_id = true
+reviewed_entry_requires_reviewed_at_utc = true
+reviewed_entry_requires_decision_basis = true
+sql_null_has_nonnull_decision = false
+sql_null_route_state = "missing"
+sql_null_sets_has_unknown = false
+canonical_bridge = "byte-exact nonnull raw value only; no trimming, case folding, whitespace folding, Unicode normalization, aliases, regexes, substrings or fuzzy matching"
+canonical_decision_expands_to_source_specific_memberships = true
+source_field_role_and_frequency_retained_per_membership = true
+source_specific_overrides_allowed = false
+
+[mapping_hash_contract]
+algorithm = "sha256"
+version = "source-specific-exact-route-mapping-v2"
+entry_order = "source_field unsigned UTF-8, SQL NULL first, then nonnull raw unsigned UTF-8"
+entry_key = ["source_field", "raw_value_state", "exact_raw_value_when_nonnull"]
+route_state_encoding = "missing=0x00, unknown=0x01, iv=0x02, noniv=0x03"
+includes_input_private_values_sha256 = true
+includes_source_field = true
+includes_sql_null_state = true
+includes_exact_nonnull_raw_value = true
+includes_route_state = true
+includes_frequency = false
+per_value_hash_publication_allowed = false
+
+[private_artifact]
+directory_mode = "0700"
+file_mode = "0600"
+git_ignored_required = true
+raw_route_values_allowed = true
+patient_identifiers_allowed = false
+event_identifiers_allowed = false
+event_timestamps_allowed = false
+
+[public_artifact]
+raw_route_values_allowed = false
+per_value_hashes_allowed = false
+allowed_content = [
+  "aggregate cardinalities",
+  "aggregate decision and review-status counts",
+  "whole-set and whole-file SHA-256 values",
+  "input lineage and implementation hashes",
+  "privacy, execution and formal-guard states",
+]
+
+[implementation_hashes]
+bundle_hash_encoding = "for each configured path in order: uint32 big-endian path UTF-8 byte length, path UTF-8 bytes, uint64 big-endian content length, exact file bytes"
+generator_paths = [
+  "src/april_repro/route_adjudication.py",
+  "scripts/create_potassium_route_review.py",
+  "scripts/compile_potassium_route_review.py",
+]
+auditor_paths = [
+  "src/april_repro/route_adjudication_audit.py",
+  "scripts/audit_potassium_route_mapping.py",
+]
+generator_bundle_sha256 = "2fb181447a60368bc55144bb61663541cb7f72477ec37a7c658185a2b3b13144"
+auditor_bundle_sha256 = "5989811d70c59206634a3e211ddceaad67dd94ae52495c777b150c93d4eebcec"
+
+[guards]
+route_review_template_created = false
+human_route_review_complete = false
+formal_route_mapping_created = false
+route_mapping_frozen = false
+query202_unlocked = false
+database_connected = false
+external_api_called = false
+product_identity_decided = false
+event_mapping_created = false
+final_source_policy = false
+formal_action = false
+formal_episode = false
+formal_label = false
+formal_cohort = false
+llm_called = false
+
+[change_control]
+any_input_set_hash_change_requires_new_component_version = true
+any_category_or_hash_contract_change_requires_new_component_version = true
+completed_human_review_must_be_separately_frozen_before_query202 = true
+editing_raw_values_or_memberships_is_forbidden = true
+selection_must_not_depend_on_downstream_counts_or_results = true

@@ -1,0 +1,32 @@
+# Copy to config/llm-runtime.local.toml, which is ignored by Git.
+# These flags record the ACTUAL provider/account setup. They do not enable ZDR
+# at a service, grant data-use permission, or establish compliance by themselves.
+# Keep API keys in process environment variables, never in this file.
+
+[providers.openai]
+endpoint = "https://api.openai.com/v1/chat/completions"
+patient_data_authorized = false
+zero_retention_verified = false
+no_training_verified = false
+no_human_review_verified = false
+
+[providers.moonshot]
+endpoint = "https://api.moonshot.cn/v1/chat/completions"
+patient_data_authorized = false
+zero_retention_verified = false
+no_training_verified = false
+no_human_review_verified = false
+
+[providers.deepseek]
+endpoint = "https://api.deepseek.com/chat/completions"
+patient_data_authorized = false
+zero_retention_verified = false
+no_training_verified = false
+no_human_review_verified = false
+
+[providers.alibaba]
+endpoint = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions"
+patient_data_authorized = false
+zero_retention_verified = false
+no_training_verified = false
+no_human_review_verified = false

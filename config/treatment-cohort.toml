@@ -1,0 +1,44 @@
+schema_version = 1
+rule_version = "treatment-decisions-v1"
+recorded_on = "2026-10-21"
+status = "adopted_for_mainline_construction"
+author_implementation_recovered = false
+
+[population]
+source_admissions = "declared possible IV treatment sources with administration/start/confirmation evidence"
+non_icu = "unique named non-ICU transfer interval at decision anchor"
+pre_electrolyte_required = false
+missing_context = "preserve unknown, no complete-case deletion"
+
+[positive]
+potassium = "one supported Administered eMAR head; component mEq total exactly 10/20/40; no cross-head summation"
+sodium = "full same-stream Started-Confirmed*-Stopped recorded rate integral times 0.513; supported single Administered amounts retained"
+sodium_discretization = "nearest positive 100/200/300/400/500 mEq, ties lower; above500 excluded; positive never rounds to zero"
+anchor = "actual recorded administration/start time"
+outcome_after = "observed Na infusion end when available; otherwise administration record time, not invented infusion end"
+sodium_limitation = "full observed course with rate changes may not be one dose decided at its start; quantity is an estimate"
+potassium_scope_limitation = "dose-supported named-head events in five-source discovery; unresolved extra sources block clean labels"
+
+[zero]
+schedule = "admittime + 4h*n, n>=1 and t+4h<=dischtime"
+selection_cell = "[t,t+4h); any relevant therapy evidence prevents a zero candidate"
+outcome_after = "t"
+meaning = "no recorded relevant exposure in declared sources through selected outcome; unknown active therapy blocks zero"
+sampling_limitation = "positive event anchors plus fixed-grid zero candidates; grid affects action prevalence and is not the author's recovered design"
+
+[clinical]
+context = "latest available pre-electrolyte in [anchor-4h,anchor], optional; fifteen features separately"
+outcome = "first lab time group after outcome_after, up to24h and discharge; invalid first group not skipped"
+lab_items = [50971, 50983]
+interference = "another therapy active/recorded from anchor through outcome inclusive excludes; focal Na controls exempt"
+prior_four_hour_potassium_blanket_exclusion = false
+prompt_clock = "anchor + action/(10 K or30 Na) hours +3h; independent of factual clock"
+
+[execution]
+read_only = true
+statement_timeout_ms = 120000
+admission_batch_size = 40
+positive_batch_size = 500
+source_snapshots_are_shared = false
+patient_rows_local_only = true
+external_llm_calls = false

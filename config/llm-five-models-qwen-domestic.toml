@@ -1,0 +1,77 @@
+# User-selected adapted replication; not the paper's original five-model set.
+# Explicit Qwen Mainland China routing profile; no runtime region fallback.
+# This packet configuration does not issue calls or establish account handling settings.
+scope = "offline_review_pilot"
+network_calls = false
+status = "adapters_only"
+registry_version = "april-five-model-adapters-qwen-domestic-v1"
+model_keys = ["gpt-4o-mini", "o3-mini", "kimi", "deepseek", "qwen"]
+verified_documentation_date = "2026-10-21"
+account_access_verified = false
+
+[models.gpt-4o-mini]
+provider = "openai"
+model = "gpt-4o-mini-2024-07-18"
+endpoint = "https://api.openai.com/v1/chat/completions"
+api_key_env = "OPENAI_API_KEY"
+accepted_response_models = ["gpt-4o-mini-2024-07-18"]
+model_version_kind = "dated_snapshot"
+shutdown_date = "2027-01-14"
+[models.gpt-4o-mini.parameters]
+temperature = 0
+max_completion_tokens = 4096
+store = false
+
+[models.o3-mini]
+provider = "openai"
+model = "o3-mini-2025-01-31"
+endpoint = "https://api.openai.com/v1/chat/completions"
+api_key_env = "OPENAI_API_KEY"
+accepted_response_models = ["o3-mini-2025-01-31"]
+model_version_kind = "dated_snapshot"
+shutdown_date = "2026-10-23"
+[models.o3-mini.parameters]
+max_completion_tokens = 4096
+store = false
+
+[models.kimi]
+provider = "moonshot"
+model = "kimi-k2.6"
+endpoint = "https://api.moonshot.cn/v1/chat/completions"
+api_key_env = "MOONSHOT_API_KEY"
+accepted_response_models = ["kimi-k2.6"]
+model_version_kind = "versioned_model_id_not_immutable"
+effective_temperature = 0.6
+temperature_note = "The service fixes non-thinking temperature at 0.6; omit temperature."
+source = "https://platform.kimi.com/docs/guide/kimi-k2-6-quickstart"
+[models.kimi.parameters]
+max_tokens = 4096
+thinking = {type = "disabled"}
+
+[models.deepseek]
+provider = "deepseek"
+model = "deepseek-flash"
+endpoint = "https://api.deepseek.com/chat/completions"
+api_key_env = "DEEPSEEK_API_KEY"
+accepted_response_models = ["deepseek-flash"]
+model_version_kind = "rolling_alias"
+documented_served_model = "DeepSeek-V4.1-Flash-1017"
+source = "https://api-docs.deepseek.com/quick_start/pricing/"
+[models.deepseek.parameters]
+temperature = 0
+max_tokens = 4096
+thinking = {type = "disabled"}
+
+[models.qwen]
+provider = "alibaba"
+model = "qwen3.7-plus-2026-05-26"
+endpoint = "https://maas.qianwenaiapi.com/compatible-mode/v1/chat/completions"
+api_key_env = "DASHSCOPE_API_KEY"
+accepted_response_models = ["qwen3.7-plus-2026-05-26"]
+model_version_kind = "dated_snapshot"
+region_note = "Mainland China endpoint explicitly selected; no international fallback."
+source = "https://platform.qianwenai.com/docs/api-reference/chat/openai-chat"
+[models.qwen.parameters]
+temperature = 0
+max_completion_tokens = 4096
+enable_thinking = false

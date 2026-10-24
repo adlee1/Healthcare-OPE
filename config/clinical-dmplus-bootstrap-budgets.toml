@@ -1,0 +1,46 @@
+rule_version = "clinical-dmplus-paired-bootstrap-budgets-v1"
+recorded_on = "2026-10-22"
+status = "same_settings_fixed_prefix_budget_extension"
+paper_references = ["Section 3.3 DM and DM+ linear regression", "Figures 2/7: 500 bootstrap datasets", "Table2: paired comparison at500 annotations"]
+author_hidden_settings_recovered = false
+model_keys = ["gpt-4o-mini", "o3-mini", "kimi", "deepseek", "qwen"]
+requested_annotation_budgets = [100, 200, 300, 400, 500]
+budget_selection = "original formal consumer.rank <=requested_annotation_budget; keep invalid replies in denominator; no replacement"
+bootstrap_datasets = 500
+seed = "april-cluster-bootstrap-v1"
+sampling_unit = "patient_cluster"
+populations = ["behavior_train", "target_train", "target_validation"]
+reuse_completed_dm_draws = true
+annotation_resampling = "fixed available annotation cache; same source behavior-patient multiplicity as factual rows"
+annotation_draw_count = "variable multiplicity-weighted rows; original unique requested budget stays the requested prefix budget"
+annotation_model_randomness_resampled = false
+target_policy = "same saved refitted policy from paired original DM draw"
+preprocessing = "same saved factual-only behavior preprocessor from paired original DM draw"
+reward_model = "ordinary least squares; intercept; numeric action/max; no interaction; no clipping"
+row_weighting = "one per repeated factual and repeated annotation row"
+d0 = "same resampled target-validation events as paired DM draw"
+reference = "same resampled observed reward mean proxy as paired DM draw"
+rmse = "sqrt(mean(signed_error^2)) over all500 draws, separately forDM andDMplus"
+rmse_error_bar = "finite_B_Monte_Carlo_SE_delta_method_not_patient_sampling_SE"
+paired_test_scores = "per-draw squared errorDM minus squared errorDMplus"
+paired_test = "two-sided paired t test on500 bootstrap squared-error pairs; positive t favorsDMplus"
+paired_test_interpretation = "conditional bootstrap distribution Monte Carlo comparison; not500 independent patient cohorts or recovered Table2 algorithm"
+alpha = 0.05
+multiple_testing = "unadjusted; report all five estimable comparisons"
+absolute_error_gain = "abs(errorDM) minus abs(errorDMplus), positive favorsDMplus"
+gain_interval = "2.5th and97.5th percentiles of paired patient-bootstrap absolute-error gain, linear interpolation"
+gain_interval_interpretation = "approximate percentile interval for absolute point-error gain conditional on observed annotation cache, not confidence interval of RMSE difference"
+positive_gain_fraction = "proportion of draws with absolute-error gain>0; descriptive, not p value"
+constant_zero_test_difference = "t=0,p=1"
+constant_nonzero_test_difference = "degenerate; t andp null, report signed effect"
+failed_draw = "preserve original ID; no replacement; no primary summary until all500 valid"
+empty_target_validation = "not_estimable; no redraw or fold change"
+nested_bootstrap = false
+blas_threads = 1
+external_llm_calls = false
+database_queries = false
+patient_rows_local_only = true
+
+zero_budget = "reuse complete original DM draw artifacts; no duplicate zero-budget run"
+existing_500 = "reuse original completed model-specific500 endpoint; new500 runs are bounded equivalence checks"
+new_output_namespace = "artifacts/clinical-dmplus-budget-bootstrap; directory suffix equals requested budget"

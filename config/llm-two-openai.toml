@@ -1,0 +1,69 @@
+# D008/D010/D012: local choices, recorded before offline packet generation.
+rule_version = "llm-two-openai-offline-v1"
+recorded_date = "2026-10-21"
+scope = "offline_review_pilot"
+network_calls = false
+model_keys = ["gpt-4o-mini", "o3-mini"]
+selection_seed = "april-llm-review-v1"
+pilot_pairs_per_cell = 5
+factual_population = "behavior_validation"
+counterfactual_population = "behavior_train"
+selection_unit = "unique_event_action_per_task_split_mode"
+selection_method = "ascending_sha256_without_outcome_or_model"
+same_pairs_across_models = true
+full_five_model_reproduction = false
+live_environment_verified = false
+api_endpoint_family = "chat_completions"
+api_path = "/v1/chat/completions"
+max_completion_tokens = 4096
+store = false
+store_false_proves_zero_retention = false
+historical_author_snapshot_recovered = false
+
+[models.gpt-4o-mini]
+snapshot = "gpt-4o-mini-2024-07-18"
+temperature = 0
+shutdown_date = "2027-01-14"
+account_access_verified = false
+
+[models.o3-mini]
+snapshot = "o3-mini-2025-01-31"
+temperature_policy = "omit_use_service_default"
+reasoning_effort_policy = "omit_use_service_default"
+shutdown_date = "2026-10-23"
+account_access_verified = false
+
+[prompt]
+template_version = "april-llm-prompts-v1"
+structured_features = 15
+extra_lab = "latest_available_pretreatment_electrolyte"
+missing_values = "explicit_unknown_no_imputation"
+unknown_fields = ["admission_time", "admission_reason", "comorbidities", "procedures"]
+domain_guidance = "reconstruction_from_published_feature_list_not_UpToDate_quotation"
+absolute_dates_in_payload = false
+identifiers_in_payload = false
+observed_post_lab_in_payload = false
+time_origin = "decision_anchor_t0"
+potassium_rate_meq_hour = 10
+sodium_rate_meq_hour = 30
+positive_action_target = "anchor_plus_discrete_action_over_rate_plus_3_hours"
+zero_action_target = "no_infusion_anchor_plus_3_hours_local_choice"
+
+[response]
+parser_version = "strict-lab-response-v1"
+keys = ["predicted_lab_value", "justification"]
+allow_single_enclosing_json_fence = true
+numeric_value = "finite_positive_JSON_number"
+invalid_output = "retain_failure_never_replace_with_zero_or_normal"
+metrics_population = "valid_predictions_with_all_requests_in_coverage_denominator"
+reward_sigma = 2.5
+f1_bins = "Appendix_A_distinct_from_reward_intervals"
+automatic_model_substitution = false
+
+[sources]
+paper = "mandyam26a.pdf Appendix A/B, sections 3.2 and 4"
+gpt_4o_mini = "https://developers.openai.com/api/docs/models/gpt-4o-mini"
+o3_mini = "https://developers.openai.com/api/docs/models/o3-mini"
+deprecations = "https://developers.openai.com/api/docs/deprecations"
+data_controls = "https://developers.openai.com/api/docs/guides/your-data"
+physionet = "https://physionet.org/news/post/llm-responsible-use/"

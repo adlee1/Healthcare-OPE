@@ -1,0 +1,691 @@
+schema_version = 1
+component_id = "D005-K-QUERY202-HUMAN-ADJUDICATION-v1"
+decision_id = "D005"
+status = "frozen_for_execution"
+scope = "Private human adjudication of the frozen Query 202 potassium semantic and route universes"
+rule_version = "k-query202-human-adjudication-v1-frozen"
+specified_on = "2026-10-13"
+execution_status = "not_initialized"
+execution_permitted = true
+implementation_state = "implemented_and_tested"
+author_setting_recovered = false
+
+[lifecycle]
+phase = "post_extraction_human_adjudication"
+predecessor_component_id = "D005-K-QUERY202-ADJUDICATION-INPUT-v1"
+predecessor_must_be_complete_and_independently_audited = true
+ndc_mode_component_id = "D005-K-QUERY202-NDC-EVIDENCE-MODE-v1"
+ndc_mode_must_be_frozen_and_effective = true
+allowed_states = [
+  "not_initialized",
+  "initialized",
+  "review_in_progress",
+  "human_review_complete_unfrozen",
+  "audited_unfrozen",
+  "separately_frozen",
+]
+initialization_makes_scientific_decisions = false
+all_items_reviewed_implies_frozen = false
+independent_audit_implies_clinical_correctness = false
+separate_freeze_required = true
+
+[source_artifact]
+directory = "artifacts/query202-adjudication-input/20261013T063022.591471Z"
+component_id = "D005-K-QUERY202-ADJUDICATION-INPUT-v1"
+source_config_path = "config/preregistrations/d005_potassium_query202_adjudication_input.toml"
+source_config_sha256 = "ed3f656243adbbf0060731e0ef6323b5dadb58e5c614691dd67eda97cd638f3d"
+manifest_file = "manifest.json"
+manifest_sha256 = "cd99bafbf5b8567edae8de1c1430a2b1e3ecb4501eb238190f59270b0bd717d6"
+aggregate_summary_file = "aggregate-summary.json"
+aggregate_summary_sha256 = "a10198946acf86a3a327d95eaa5eff53952275495b7befa59f7087d72e98644f"
+audit_file = "audit-summary.json"
+audit_sha256 = "07a442689e6be15c98f05a817737a67ca6c0637f176a68e68c75a7d36cadb851"
+audit_status = "passed"
+audit_failed_checks = 0
+
+[source_artifact.semantic_template]
+file = "semantic-review-template.jsonl.gz"
+stored_sha256 = "7c049c4f946525436c5a26f004930f4bccfc83aa035da29c3349b1890d72e1b4"
+stored_bytes = 412019
+raw_sha256 = "983be02615aaf9ca3582d2e1b02bf6567d0bf02303dc6a486857de68dac3d887"
+raw_bytes = 15439475
+records = 34569
+semantic_keys = 34565
+semantic_key_set_sha256 = "cee42c49d4618e6c62e99dcea26c53166f21305231b3c35991d2c2534b94368a"
+
+[source_artifact.local_evidence]
+file = "local-evidence.jsonl.gz"
+stored_sha256 = "5305cf33885d7afc42d9ac01fda060d453026de6c13b0c3aa0e11bdeeb1a228d"
+stored_bytes = 30753881
+raw_sha256 = "271acbbfc99fe81cc8e23f998023a6abe5f118176b28bc4e30a81e8408345468"
+raw_bytes = 1098608356
+records = 1861507
+unique_tuples = 1861485
+total_multiplicity = 392077967
+
+[source_artifact.route_template]
+file = "route-review-template.jsonl.gz"
+stored_sha256 = "8ac9d80b9f085af9354960afe0005652075a5f4dbfd46bb574cbe335831f608a"
+stored_bytes = 6900
+raw_sha256 = "06425be639eda2691dfc05c0c1703420b58a28cbe1a09f0c75b0169eec426bde"
+raw_bytes = 145193
+records = 357
+canonical_exact_nonnull_values = 117
+source_specific_nonnull_memberships = 233
+source_specific_sql_null_memberships = 3
+source_specific_typed_memberships = 236
+canonical_exact_set_sha256 = "86092716757590b14e190c2967016b7428c01837a60dc7a8965300e2853030b5"
+
+[ndc_decision]
+config_path = "config/preregistrations/d005_potassium_query202_ndc_evidence_mode.toml"
+config_sha256 = "6f31bd22a21e36b506d84e68dd8d03bcbfe62df857f82812f6057ecd2cab2216"
+validator_bundle_sha256 = "257300995bbae47a3fa3fd26b223b0842031de3093044f4ce9c0ae8e0b7c88bc"
+required_status = "frozen"
+required_mode = "not_used_frozen"
+required_effective = true
+ndc_handoff_rows_may_be_read = false
+
+[workspace]
+artifact_parent = "artifacts/query202-human-adjudication-workspace"
+semantic_batch_size = 250
+semantic_batch_count = 139
+route_batch_count = 1
+semantic_id_format = "S%06d"
+route_id_format = "R%06d"
+id_sequence_starts_at = 1
+ids_are_private_references_not_canonical_keys = true
+batch_assignment = "source-template-order contiguous fixed-size partition"
+immutable_source_views_separate_from_editable_decision_ledgers = true
+each_editable_batch_binds_immutable_base_sha256 = true
+batch_overlap_allowed = false
+batch_omission_allowed = false
+last_write_wins_allowed = false
+immutable_source_fields_may_be_edited = false
+private_directory_mode = "0700"
+private_file_mode = "0600"
+git_ignored_required = true
+public_raw_values_allowed = false
+public_per_value_hashes_allowed = false
+stdout_raw_values_allowed = false
+strict_workspace_inventory_required = true
+allowed_top_level_entries = [
+  "workspace-manifest.json",
+  "workspace-events.jsonl",
+  "semantic-source",
+  "semantic-decisions",
+  "semantic-groups",
+  "route-source",
+  "route-decisions",
+  "evidence-registry",
+  "attestations",
+  "revisions",
+]
+
+[structural_preview]
+enabled_for_internal_api = true
+cli_entry_allowed = false
+requires_explicit_allow_proposed = true
+artifact_parent = "artifacts/query202-human-adjudication-workspace/_structural-previews"
+formal_workspace = false
+workspace_initialized = false
+resume_or_upgrade_to_formal_allowed = false
+compile_audit_or_freeze_allowed = false
+config_or_bundle_change_invalidates_preview = true
+private_directory_mode = "0700"
+private_file_mode = "0600"
+git_ignored_required = true
+raw_values_on_stdout_allowed = false
+
+[semantic_review]
+dimensions = [
+  "product_identity",
+  "dosage_form",
+  "treatment_intent",
+  "potassium_content",
+  "meq_convertibility",
+]
+status_values = ["supported", "refuted", "uncertain"]
+review_status_values = ["unreviewed", "reviewed"]
+initial_status = "uncertain"
+initial_review_status = "unreviewed"
+reviewed_uncertain_allowed = true
+nonuncertain_requires_evidence_refs = true
+reviewed_requires_human_reviewer_id = true
+reviewed_requires_strict_utc_time = true
+reviewed_requires_nonempty_rationale = true
+reviewed_uncertain_requires_insufficiency_or_conflict_rationale = true
+software_may_set_reviewed = false
+llm_may_set_reviewed = false
+normalization_may_establish_semantics = false
+string_similarity_may_establish_semantics = false
+
+[human_review_policy]
+reviewer_model = "single_reviewer_with_full_attestation"
+allowed_models = ["single_reviewer_with_full_attestation", "dual_independent_with_conflict_adjudication"]
+selection_is_project_choice_not_paper_fact = true
+single_reviewer_identity_must_match_all_item_group_revision_and_batch_attestation_records = true
+dual_review_requires_new_component_version = true
+batch_attestation_required = true
+attestation_binds_batch_sha256 = true
+attestation_binds_review_policy_version = true
+attestation_requires_reviewer_id_and_strict_utc_time = true
+automated_attestation_allowed = false
+
+[revisions]
+append_only = true
+active_revision_per_item = 1
+supersedes_sha256_required_after_first_revision = true
+revision_reason_required = true
+identical_resubmission_is_idempotent = true
+conflicting_active_revisions_fail_closed = true
+last_write_wins_allowed = false
+canonical_revision_serialization = "canonical-json-utf8-sort-keys-no-whitespace-v1"
+revision_sha256_binds_item_id_base_sha256_decision_provenance_and_previous_revision = true
+group_registry_change_invalidates_affected_batch_attestations = true
+
+[review_writer]
+schema_version = 1
+transaction_schema_version = 1
+transaction_type = "human_adjudication_update"
+transaction_exact_schema_required = true
+workspace_snapshot_hash_version = "query202-human-workspace-file-snapshot-v1"
+max_transaction_bytes = 16777216
+max_evidence_document_bytes = 134217728
+max_imported_document_bytes_per_transaction = 268435456
+max_workspace_versioned_document_bytes = 2147483648
+transaction_path_project_relative_required = true
+transaction_path_git_ignored_required = true
+transaction_file_mode = "0600"
+transaction_file_nlink = 1
+versioned_document_source_path_project_relative_required = true
+versioned_document_source_path_git_ignored_required = true
+versioned_document_source_file_mode = "0600"
+versioned_document_source_file_nlink = 1
+versioned_document_nonempty_required = true
+bounded_descriptor_inputs = ["transaction_request", "versioned_document_source", "workspace_versioned_document"]
+named_stat_and_open_fstat_before_read_required = true
+bounded_read_loop_maximum_plus_one_hard_stop_required = true
+final_path_inode_parent_mode_size_nlink_hash_closure_required = true
+semantic_route_and_group_explicit_review_status = "reviewed"
+human_supplied_fields = ["semantic_route_and_mapping_group_decisions", "explicit_review_status", "rationale_and_revision_reason", "reviewer_identity", "review_and_attestation_times", "evidence_references_and_document_bindings", "batch_attestation_confirmations", "terminal_event_confirmation"]
+software_derived_fields = ["revision_numbers", "supersedes_sha256", "revision_event_records", "workspace_event_records", "canonical_record_and_chain_hashes", "batch_and_group_registry_hash_bindings", "completion_active_workspace_state_hash"]
+software_derivation_restricted_to_listed_mechanics = true
+full_private_sibling_stage_copy_required = true
+document_byte_preflight_required = true
+stage_document_bytes_before_import_must_equal_live_preflight = true
+stage_document_bytes_after_import_must_conserve_existing_plus_imported = true
+full_staged_workspace_validation_required = true
+two_pass_workspace_snapshot_hash_required = true
+external_nonblocking_flock_required = true
+named_lock_inode_mode_nlink_closure_before_and_after_exchange_required = true
+darwin_atomic_exchange = "renameatx_np(RENAME_SWAP)"
+linux_atomic_exchange = "renameat2(RENAME_EXCHANGE)"
+nonatomic_exchange_fallback_allowed = false
+stale_workspace_snapshot_base_fails_closed = true
+transaction_replay_after_success_fails_closed = true
+exact_duplicate_ledger_revision_resubmission_is_idempotent = true
+invalid_live_with_stale_stage_policy = "retain_both_fail_closed_manual_recovery"
+crash_after_exchange_before_acknowledgement_is_ambiguous = true
+retry_after_ambiguous_crash_requires_current_snapshot_inspection = true
+mapping_group_tombstone_supported = false
+unreplaceable_mapping_group_policy = "abandon_current_workspace_and_reinitialize_new_workspace"
+aggregate_only_output_required = true
+private_values_in_output_allowed = false
+database_access_allowed = false
+network_access_allowed = false
+external_api_access_allowed = false
+llm_access_allowed = false
+
+[semantic_review.propositions]
+product_identity = "The exact source-field value has an adequately evidenced medication product or ingredient identity for later component interpretation."
+dosage_form = "The exact source-field value supports or refutes an intravenously compatible dosage form; event-level route remains a separate decision."
+treatment_intent = "The exact source-field value supports or refutes compatibility with potassium repletion at the vocabulary level; it does not decide the intent of a specific event."
+potassium_content = "The exact source-field value supports or refutes therapeutically relevant potassium content."
+meq_convertibility = "The exact source-field value supports or refutes that a later context-specific recorded-dose rule can convert the product amount to potassium mEq using documented evidence; this review does not calculate an action dose."
+
+[semantic_review.values]
+field = "value"
+type = "private object with exact keys code and candidates"
+code_type = "controlled UTF-8 string"
+candidates_type = "ordered list of private nonempty UTF-8 strings"
+candidates_preserve_conflicts_and_one_to_many_results = true
+supported_or_refuted_requires_evidence_refs = true
+uncertain_may_preserve_candidate_values = true
+value_is_not_a_status = true
+value_is_not_an_action_dose = true
+
+[semantic_review.values.product_identity]
+supported_code = "identified_medication_product_or_ingredient"
+refuted_code = "not_medication_product_or_ingredient"
+uncertain_code = "unresolved_or_conflicting_product_identity"
+
+[semantic_review.values.dosage_form]
+supported_code = "iv_compatible_dosage_form"
+refuted_code = "not_iv_compatible_dosage_form"
+uncertain_code = "unresolved_or_conflicting_iv_compatibility"
+
+[semantic_review.values.treatment_intent]
+supported_code = "potassium_repletion_compatible"
+refuted_code = "not_potassium_repletion_compatible"
+uncertain_code = "unresolved_or_conflicting_repletion_compatibility"
+
+[semantic_review.values.potassium_content]
+supported_code = "therapeutic_potassium_present"
+refuted_code = "therapeutic_potassium_absent"
+uncertain_code = "unresolved_or_conflicting_potassium_content"
+
+[semantic_review.values.meq_convertibility]
+supported_code = "contextually_convertible_to_potassium_meq"
+refuted_code = "not_convertible_to_potassium_meq"
+uncertain_code = "unresolved_or_conflicting_meq_convertibility"
+actual_conversion_factor_deferred_to_recorded_dose_component = true
+
+[mapping_groups]
+registry_required_for_every_nonnull_group_id = true
+minimum_members = 2
+members_are_exact_semantic_review_ids = true
+member_set_must_equal_key_assignments = true
+group_level_five_dimension_decision_required = true
+group_level_nonuncertain_requires_evidence_refs = true
+group_level_human_review_provenance_required = true
+normalization_or_string_similarity_may_create_group = false
+implicit_transitive_merge_allowed = false
+conflicting_duplicate_group_definition_allowed = false
+eligible_group_members_must_be_linked_by_bound_local_evidence = true
+local_evidence_cooccurrence_alone_establishes_group = false
+group_decision_authoritative_only_for_multimembership_component_with_exact_common_group = true
+member_decision_authoritative_for_single_membership_component = true
+group_and_member_decisions_may_differ_with_explicit_evidence = true
+
+[mapping_groups.local_evidence_eligibility]
+allowed_stage_kind = [
+  "202b:detail_seed_membership_bridge",
+  "202b:emar_medication_detail_bridge",
+  "202c:detail_pharmacy_prescription_bridge",
+  "202c:head_pharmacy_prescription_bridge",
+  "202c:pharmacy_prescription_bridge",
+]
+group_member_set_must_be_subset_of_one_tuple_nonnull_semantic_membership_set = true
+group_membership_requires_human_identity_evidence_beyond_cooccurrence = true
+local_tuple_ordinal_is_one_based_within_stage_kind_data_records = true
+unsupported_or_unlinked_group_fails_closed = true
+
+[component_role]
+level = "physical component during mapped-event application"
+derived_from_effective_product_identity_status = true
+supported_maps_to = "product"
+refuted_maps_to = "nonproduct"
+uncertain_maps_to = "uncertain"
+allowed_values = ["product", "nonproduct", "uncertain"]
+human_workspace_does_not_assign_event_components = true
+
+[route_review]
+decision_values = ["iv", "noniv", "unknown"]
+review_status_values = ["unreviewed", "reviewed"]
+initial_decision = "unknown"
+initial_review_status = "unreviewed"
+reviewed_unknown_allowed = true
+allowed_decision_bases = [
+  "explicit_iv_route_semantics",
+  "explicit_noniv_route_semantics",
+  "ambiguous_or_insufficient_route_semantics",
+  "other_documented_human_judgment",
+]
+sql_null_route_state = "missing"
+sql_null_requires_human_review = false
+sql_null_sets_unknown = false
+source_specific_override_allowed = false
+normalization_or_string_similarity_may_classify_route = false
+software_may_set_reviewed = false
+llm_may_set_reviewed = false
+reviewed_requires_human_reviewer_id = true
+reviewed_requires_strict_utc_time = true
+reviewed_requires_nonempty_rationale = true
+reviewed_requires_evidence_refs = true
+reviewed_unknown_requires_ambiguity_or_insufficiency_rationale = true
+
+[evidence_registry]
+private_registry_required = true
+allowed_namespaces = ["local_tuple", "source_template", "versioned_document"]
+local_tuple_reference_fields = ["local_evidence_raw_sha256", "stage", "tuple_kind", "ordinal_within_kind"]
+source_template_reference_fields = ["source_template_raw_sha256", "private_review_id"]
+versioned_document_reference_fields = ["evidence_id", "document_sha256", "document_version", "accessed_at_utc", "private_local_path"]
+external_document_must_be_saved_as_private_local_evidence = true
+unversioned_url_or_free_text_reference_allowed = false
+evidence_registry_files_in_snapshot_closure = true
+network_access_by_workspace_tools_allowed = false
+external_api_access_by_workspace_tools_allowed = false
+
+[evidence_registry.local_tuple]
+allowed_stage_kind = [
+  "202b:detail_product_context",
+  "202b:detail_seed_membership_bridge",
+  "202b:emar_medication_detail_bridge",
+  "202b:emar_medication_head_partition",
+  "202c:detail_pharmacy_prescription_bridge",
+  "202c:head_pharmacy_prescription_bridge",
+  "202c:pharmacy_no_prescription_component",
+  "202c:pharmacy_prescription_bridge",
+  "202c:pharmacy_product_context",
+  "202c:prescription_identifier_context",
+]
+ordinal_is_one_based_within_stage_kind_data_records = true
+must_resolve_to_exact_record_in_bound_local_evidence_stream = true
+ordinary_decision_relevance_is_human_judgment_not_structural_validation = true
+
+[evidence_registry.local_tuple_index]
+file = "evidence-registry/local-evidence-bridge-index.bin"
+encoding = "u8-member-count+4xu32be-review-sequence-zero-padded-v1"
+source_local_evidence_raw_sha256 = "271acbbfc99fe81cc8e23f998023a6abe5f118176b28bc4e30a81e8408345468"
+record_bytes = 17
+index_records = 793186
+index_bytes = 13484162
+index_sha256 = "49b1098ace57f3f897a61e3a73b8777ecfe8e507c79cf26c8cae5355ee716322"
+all_stage_kind_order = [
+  "202b:detail_product_context",
+  "202b:detail_seed_membership_bridge",
+  "202b:emar_medication_detail_bridge",
+  "202b:emar_medication_head_partition",
+  "202c:pharmacy_product_context",
+  "202c:pharmacy_prescription_bridge",
+  "202c:prescription_identifier_context",
+  "202c:head_pharmacy_prescription_bridge",
+  "202c:pharmacy_no_prescription_component",
+  "202c:detail_pharmacy_prescription_bridge",
+]
+all_stage_kind_ordinal_counts = [
+  137579,
+  49648,
+  48825,
+  5045,
+  717377,
+  236630,
+  208209,
+  172567,
+  89,
+  285516,
+]
+bridge_stage_kind_order = [
+  "202b:detail_seed_membership_bridge",
+  "202b:emar_medication_detail_bridge",
+  "202c:pharmacy_prescription_bridge",
+  "202c:head_pharmacy_prescription_bridge",
+  "202c:detail_pharmacy_prescription_bridge",
+]
+bridge_block_offsets = [0, 49648, 98473, 335103, 507670]
+bridge_block_counts = [49648, 48825, 236630, 172567, 285516]
+
+[workspace_state]
+event_log_file = "workspace-events.jsonl"
+event_log_append_only = true
+event_log_canonical_serialization = "canonical-json-utf8-sort-keys-no-whitespace-v1"
+allowed_events = ["initialized", "batch_submitted", "batch_revised", "group_registry_revised", "attestation_added", "validation_failed", "human_review_complete_unfrozen", "abandoned"]
+state_is_derived_from_validated_event_log_and_current_active_revision_set = true
+configuration_execution_status_is_not_rewritten = true
+failed_validation_never_advances_state = true
+resume_requires_revalidation_of_all_active_inputs = true
+abandoned_workspace_cannot_be_reactivated = true
+
+[workspace_state.revision_event_log]
+file = "revisions/revision-events.jsonl"
+header_record_type = "revision_event_ledger_begin"
+header_exact_fields = ["record_type", "schema_version", "component_id", "config_sha256", "initial_event_count"]
+header_schema_version = 1
+header_initial_event_count = 0
+record_type = "revision_event"
+record_exact_fields = ["record_type", "event_index", "previous_event_sha256", "revision_kind", "subject_id", "batch_index", "revision", "revision_sha256", "supersedes_sha256", "reviewer_id", "recorded_at_utc"]
+allowed_revision_kinds = ["semantic_decision", "route_decision", "mapping_group"]
+event_index_starts_at = 1
+event_index_contiguous = true
+first_previous_event_sha256_is_null = true
+later_previous_event_sha256_is_prior_canonical_record_sha256 = true
+canonical_record_hash = "sha256-canonical-json-utf8-sort-keys-no-whitespace-v1"
+nondecreasing_strict_utc_time_required = true
+one_event_per_unique_noninitial_item_revision = true
+one_event_per_unique_mapping_group_revision = true
+exact_duplicate_ledger_resubmission_adds_no_event = true
+item_revision_after_first_must_be_reviewed = true
+record_must_bind_ledger_revision_sha_supersedes_reviewer_and_time = true
+semantic_and_route_batch_index_required = true
+mapping_group_batch_index_is_null = true
+
+[workspace_state.workspace_event_log]
+file = "workspace-events.jsonl"
+header_record_type = "workspace_event_ledger_begin"
+header_exact_fields = ["record_type", "schema_version", "component_id", "config_sha256", "initial_event_count"]
+header_schema_version = 1
+header_initial_event_count = 0
+record_type = "workspace_event"
+record_exact_fields = ["record_type", "event_index", "previous_event_sha256", "event_type", "event_at_utc", "actor_id", "subject_kind", "subject_id", "subject_sha256"]
+event_index_starts_at = 1
+event_index_contiguous = true
+first_previous_event_sha256_is_null = true
+later_previous_event_sha256_is_prior_canonical_record_sha256 = true
+canonical_record_hash = "sha256-canonical-json-utf8-sort-keys-no-whitespace-v1"
+nondecreasing_strict_utc_time_required = true
+formal_first_event = "initialized"
+preview_initialized_event_allowed = false
+one_event_per_revision_event = true
+one_event_per_unique_attestation = true
+validation_failed_never_advances_state = true
+human_review_complete_requires_current_review_and_attestation_closure = true
+abandoned_is_terminal = true
+
+[workspace_state.active_state_hash]
+version = "query202-human-adjudication-active-workspace-state-v1"
+encoding = "sha256(version-utf8 || canonical-json-utf8-sort-keys-no-whitespace-v1)"
+object_exact_keys = ["batches", "mapping_groups", "current_attestations"]
+batches_sorted_by = ["review_kind", "batch_index"]
+batch_exact_fields = ["review_kind", "batch_index", "item_count", "active_decisions_sha256", "decision_ledger_sha256"]
+mapping_groups_sorted_by = ["mapping_group_id"]
+mapping_group_exact_fields = ["mapping_group_id", "active_revision_sha256"]
+attestations_sorted_by = ["review_kind", "batch_index"]
+attestation_exact_fields = ["review_kind", "batch_index", "attestation_sha256"]
+
+[final_outputs]
+component_id = "D005-K-QUERY202-HUMAN-ADJUDICATION-v1"
+artifact_parent = "artifacts/query202-human-adjudication"
+artifact_directory_naming = "strict-utc-basic-with-fraction-v1"
+private_directory_mode = "0700"
+private_file_mode = "0600"
+strict_inventory = [
+  "reviewed-semantic-ledger.jsonl.gz",
+  "semantic-mapping-groups.jsonl.gz",
+  "source-specific-route-mapping.jsonl.gz",
+  "human-attestations.jsonl.gz",
+  "evidence-registry.jsonl.gz",
+  "manifest.json",
+  "aggregate-summary.json",
+]
+strict_inventory_after_audit = [
+  "reviewed-semantic-ledger.jsonl.gz",
+  "semantic-mapping-groups.jsonl.gz",
+  "source-specific-route-mapping.jsonl.gz",
+  "human-attestations.jsonl.gz",
+  "evidence-registry.jsonl.gz",
+  "manifest.json",
+  "aggregate-summary.json",
+  "audit-summary.json",
+]
+strict_inventory_after_freeze = [
+  "reviewed-semantic-ledger.jsonl.gz",
+  "semantic-mapping-groups.jsonl.gz",
+  "source-specific-route-mapping.jsonl.gz",
+  "human-attestations.jsonl.gz",
+  "evidence-registry.jsonl.gz",
+  "manifest.json",
+  "aggregate-summary.json",
+  "audit-summary.json",
+  "freeze-manifest.json",
+]
+independent_audit_adds_only = "audit-summary.json"
+separate_freeze_adds_only = "freeze-manifest.json"
+gzip_encoding = "gzip+utf8+ndjson-single-member-mtime0-v1"
+semantic_ledger_schema = "query202-reviewed-semantic-ledger-v1"
+semantic_decision_hash_version = "query202-semantic-decisions-v1"
+semantic_ledger_includes_exact_source_field_and_raw_value = true
+semantic_key_set_hash_version = "source-field-nonnull-exact-value-set-v1"
+semantic_key_set_must_equal_source = true
+semantic_active_revision_projection_required = true
+mapping_group_schema = "query202-semantic-mapping-groups-v1"
+mapping_group_hash_version = "query202-semantic-mapping-groups-v1"
+route_mapping_schema = "query202-source-specific-exact-route-mapping-v1"
+route_mapping_hash_version = "query202-source-specific-exact-route-mapping-v1"
+route_mapping_expands_canonical_to_233_nonnull_memberships = true
+route_mapping_adds_3_sql_null_missing_memberships = true
+route_mapping_total_typed_memberships = 236
+route_mapping_preserves_source_key_field_role_frequency_and_provenance = true
+attestation_schema = "query202-human-attestations-v1"
+attestation_hash_version = "query202-human-attestations-v1"
+evidence_registry_schema = "query202-evidence-registry-v1"
+evidence_registry_hash_version = "query202-evidence-registry-v1"
+manifest_schema = "query202-human-adjudication-final-manifest-v1"
+aggregate_summary_schema = "query202-human-adjudication-aggregate-summary-v1"
+audit_schema = "query202-human-adjudication-final-artifact-audit-v1"
+audit_method = "independent-reimplementation-without-generator-imports-v1"
+auditor_component_id = "D005-K-QUERY202-HUMAN-ADJUDICATION-FINAL-AUDITOR-v1"
+freeze_schema = "query202-human-adjudication-freeze-manifest-v1"
+workspace_snapshot_hash_version = "query202-human-workspace-file-snapshot-v1"
+registered_document_set_hash_version = "query202-human-versioned-document-set-v1"
+retained_versioned_documents_location = "formal_workspace"
+final_artifact_self_contained = false
+independent_audit_must_reopen_retained_documents = true
+freeze_must_reopen_retained_documents = true
+manifest_status_before_freeze = "human_review_complete_unfrozen"
+audit_status_required_before_freeze = "passed"
+audit_checks_total = 18
+freeze_manifest_status = "frozen"
+freeze_manifest_binds_all_private_whole_file_hashes = true
+freeze_manifest_binds_semantic_and_route_decision_hashes = true
+freeze_manifest_binds_source_ndc_config_generator_auditor_and_audit_hashes = true
+final_artifact_review_complete_guards_true = ["semantic_review_complete", "route_review_complete"]
+final_freeze_guards_true = ["reviewed_semantic_ledger_frozen", "route_mapping_frozen"]
+downstream_scientific_guards_remain_false = [
+  "product_mapping_accepted",
+  "event_mapping_created",
+  "final_source_policy",
+  "complete_intervention_coverage",
+  "formal_action",
+  "formal_episode",
+  "zero_action_constructed",
+  "formal_non_icu_rule",
+  "formal_label",
+  "formal_cohort",
+  "patient_data_exported",
+  "llm_called",
+]
+
+[downstream_binding]
+mapped_event_application_config = "config/preregistrations/d005_potassium_query202_mapped_event_application.toml"
+current_mapped_event_application_is_stale_and_must_not_execute = true
+required_future_predecessor_component_id = "D005-K-QUERY202-PREADJUDICATION-EVIDENCE-v2"
+required_future_human_component_id = "D005-K-QUERY202-HUMAN-ADJUDICATION-v1"
+old_route_component_id_must_be_replaced = "D005-K-ROUTE-ADJUDICATION-v2"
+required_route_mapping_hash_version = "query202-source-specific-exact-route-mapping-v1"
+mapped_event_application_must_be_revised_and_refrozen_after_human_artifact_freeze = true
+
+[snapshot_closure]
+two_pass_required_for_validation_and_compile = true
+compare_device_inode_mode_size_sha256 = true
+source_public_files_included = true
+source_semantic_route_and_local_evidence_files_included = true
+workspace_local_evidence_index_included = true
+test_attestation_and_test_files_included = true
+ndc_decision_config_included = true
+all_batch_and_group_files_included = true
+config_and_implementation_bundles_included = true
+in_place_mutation_fails_closed = true
+symlink_input_allowed = false
+
+[implementation]
+bundle_encoding = "uint32be_path_length+path_utf8+uint64be_content_length+content"
+generator_paths = [
+  "src/april_repro/__init__.py",
+  "src/april_repro/query202_human_adjudication_preregistration.py",
+  "src/april_repro/query202_human_adjudication.py",
+  "src/april_repro/query202_human_adjudication_writer.py",
+  "scripts/initialize_potassium_query202_human_adjudication.py",
+  "scripts/validate_potassium_query202_human_adjudication.py",
+  "scripts/apply_potassium_query202_human_adjudication_transaction.py",
+  "scripts/attest_potassium_query202_human_adjudication_tests.py",
+  "src/april_repro/query202_human_adjudication_finalize.py",
+  "scripts/compile_potassium_query202_human_adjudication.py",
+  "scripts/freeze_potassium_query202_human_adjudication.py",
+]
+generator_bundle_sha256 = "75ccd68e7563ef3254003a86d20b0d85f1f2e1930deec3ae0b838d8169af8a17"
+auditor_paths = [
+  "src/april_repro/__init__.py",
+  "src/april_repro/query202_human_adjudication_audit.py",
+  "scripts/audit_potassium_query202_human_adjudication.py",
+]
+auditor_bundle_sha256 = "432d9c5959ef7a963605f42dc5db44578d928f8146d43968c3bcef0e1ab6c0b3"
+
+[test_attestation]
+schema_version = 2
+status = "passed"
+attestation_path = "config/attestations/query202-human-adjudication-tests.json"
+attestation_sha256 = "e05a34345705b86e645c094af49c480697cc6a43c354a9d10c3acf6ef9c196b2"
+project_local_path_when_passed = "config/attestations/query202-human-adjudication-tests.json"
+project_local_public_evidence_required = true
+canonical_encoding = "canonical-json-utf8-sort-keys-no-whitespace-newline-v1"
+test_command = "HOME=.attestation-home LC_ALL=C PATH=/usr/bin:/bin:/usr/sbin:/sbin PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 PYTHONNOUSERSITE=1 PYTHONPATH=src:. PYTHONUTF8=1 TMPDIR=.attestation-tmp .venv/bin/python -m unittest tests.test_query202_human_adjudication_preregistration tests.test_query202_human_adjudication_control_plane tests.test_query202_human_adjudication tests.test_query202_human_adjudication_writer tests.test_query202_human_adjudication_audit tests.test_query202_human_adjudication_finalize -v"
+test_command_argv = [".venv/bin/python", "-m", "unittest", "tests.test_query202_human_adjudication_preregistration", "tests.test_query202_human_adjudication_control_plane", "tests.test_query202_human_adjudication", "tests.test_query202_human_adjudication_writer", "tests.test_query202_human_adjudication_audit", "tests.test_query202_human_adjudication_finalize", "-v"]
+test_command_environment = ["HOME=.attestation-home", "LC_ALL=C", "PATH=/usr/bin:/bin:/usr/sbin:/sbin", "PYTHONDONTWRITEBYTECODE=1", "PYTHONHASHSEED=0", "PYTHONNOUSERSITE=1", "PYTHONPATH=src:.", "PYTHONUTF8=1", "TMPDIR=.attestation-tmp"]
+required_test_paths = ["tests/test_query202_human_adjudication_preregistration.py", "tests/test_query202_human_adjudication_control_plane.py", "tests/test_query202_human_adjudication.py", "tests/test_query202_human_adjudication_writer.py", "tests/test_query202_human_adjudication_audit.py", "tests/test_query202_human_adjudication_finalize.py"]
+test_execution_paths = ["src/april_repro/__init__.py", "src/april_repro/query202_human_adjudication_preregistration.py", "src/april_repro/query202_human_adjudication.py", "src/april_repro/query202_human_adjudication_writer.py", "scripts/initialize_potassium_query202_human_adjudication.py", "scripts/validate_potassium_query202_human_adjudication.py", "scripts/apply_potassium_query202_human_adjudication_transaction.py", "scripts/attest_potassium_query202_human_adjudication_tests.py", "src/april_repro/query202_human_adjudication_finalize.py", "scripts/compile_potassium_query202_human_adjudication.py", "scripts/freeze_potassium_query202_human_adjudication.py", "src/april_repro/query202_human_adjudication_audit.py", "scripts/audit_potassium_query202_human_adjudication.py", "tests/test_query202_human_adjudication_preregistration.py", "tests/test_query202_human_adjudication_control_plane.py", "tests/test_query202_human_adjudication.py", "tests/test_query202_human_adjudication_writer.py", "tests/test_query202_human_adjudication_audit.py", "tests/test_query202_human_adjudication_finalize.py", "tests/__init__.py", "Makefile", "scripts/report_potassium_query202_human_adjudication.py", "src/april_repro/cli.py", "src/april_repro/preregistration.py", "config/preregistrations/d005_potassium_query202_human_adjudication.toml", "config/preregistrations/d005_potassium_query202_adjudication_input.toml", "config/preregistrations/d005_potassium_query202_ndc_evidence_mode.toml"]
+execution_snapshot_encoding = "ordered-path+normalized-config-or-file-sha256+size+mode+nlink-v2"
+ordered_test_ids_encoding = "uint32be-id-length+id-utf8-v1"
+ordered_test_ids_sha256 = "21016a33a706a060279241c5b0ecba304369de3d7fda5cc5b9ba45512797abc9"
+mutation_test_ids_encoding = "canonical-json-utf8-sort-keys-no-whitespace-v1"
+mutation_test_ids_sha256 = "a6e147692a23ea83eba3c8f1cc2e090f58d656ec9202436c0ef70fdde0892ff5"
+required_test_count = 135
+failures_required = 0
+errors_required = 0
+required_mutation_classes = ["missing_duplicate_or_conflicting_review_records", "stale_base_or_revision_chain_tamper", "forged_or_ineligible_evidence_reference", "reviewer_identity_or_human_attestation_tamper", "privacy_permission_or_gitignore_tamper", "symlink_parent_swap_or_toctou_tamper", "final_output_audit_or_freeze_inventory_tamper", "implementation_bundle_drift", "test_command_file_order_count_or_result_drift", "scientific_contract_or_lifecycle_gate_drift"]
+attestation_contains_private_values = false
+attestation_contains_test_output = false
+private_safe_exact_schema_required = true
+builder_must_run_exact_test_command = true
+builder_must_execute_private_staged_snapshot = true
+every_test_id_must_report_ok = true
+python_runtime_path = ".venv/bin/python"
+python_runtime_binding = "resolved-regular-file-sha256+bytes+implementation+version-v1"
+project_local_execution_closure_non_hermetic = true
+status_change_alone_may_enable_execution = false
+
+[test_attestation.mutation_test_ids]
+missing_duplicate_or_conflicting_review_records = ["tests.test_query202_human_adjudication.HumanAdjudicationWorkspaceTests.test_missing_cross_batch_and_conflicting_revision_fail_closed", "tests.test_query202_human_adjudication_writer.HumanAdjudicationWriterTests.test_duplicate_revision_operation_and_invalid_reference_fail_closed", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_unsafe_permission_and_conflicting_revision_fail_closed"]
+stale_base_or_revision_chain_tamper = ["tests.test_query202_human_adjudication_writer.HumanAdjudicationWriterTests.test_stale_base_and_reviewer_mismatch_fail_without_mutation", "tests.test_query202_human_adjudication.HumanAdjudicationWorkspaceTests.test_noninitial_unreviewed_revision_is_rejected", "tests.test_query202_human_adjudication.HumanAdjudicationWorkspaceTests.test_nested_event_serialization_policy_is_exact"]
+forged_or_ineligible_evidence_reference = ["tests.test_query202_human_adjudication.HumanAdjudicationWorkspaceTests.test_invalid_mapping_group_member_fails_closed", "tests.test_query202_human_adjudication.HumanAdjudicationWorkspaceTests.test_reviewed_schema_requires_registered_evidence_and_cannot_complete_without_attestation", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_forged_general_local_tuple_reference_fails_closed", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_source_derivation_rejects_valid_but_semantically_wrong_index", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_source_derivation_rejects_truncation_and_member_mismatch", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_source_derivation_detects_in_read_source_toctou"]
+reviewer_identity_or_human_attestation_tamper = ["tests.test_query202_human_adjudication_writer.HumanAdjudicationWriterTests.test_full_human_decision_attestation_and_completion_flow", "tests.test_query202_human_adjudication.HumanAdjudicationWorkspaceTests.test_all_reviewed_requires_current_batch_attestations", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_single_global_reviewer_mismatch_fails_closed"]
+privacy_permission_or_gitignore_tamper = ["tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_private_streams_are_only_hashed_as_opaque_files", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_report_contains_only_public_aggregate_facts", "tests.test_query202_human_adjudication_control_plane.HumanAdjudicationControlPlaneTests.test_test_attestation_command_emits_only_aggregate_status", "tests.test_query202_human_adjudication_control_plane.HumanAdjudicationControlPlaneTests.test_test_attestation_rejects_oversized_existing_file_before_read", "tests.test_query202_human_adjudication_writer.HumanAdjudicationWriterTests.test_cli_failure_output_is_aggregate_only", "tests.test_query202_human_adjudication_writer.HumanAdjudicationWriterTests.test_transaction_byte_bound_is_exact_prechecked_and_hard_limited", "tests.test_query202_human_adjudication_writer.HumanAdjudicationWriterTests.test_document_cumulative_limits_hold_before_and_after_stage_import", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_candidate_rejects_unsafe_attestation_dependency_and_source_links", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_in_place_chmod_during_read_fails_closed", "tests.test_query202_human_adjudication_writer.HumanAdjudicationWriterTests.test_hard_linked_private_request_is_rejected", "tests.test_query202_human_adjudication_writer.HumanAdjudicationWriterTests.test_transaction_hard_link_added_during_run_fails_closure", "tests.test_query202_human_adjudication_writer.HumanAdjudicationWriterTests.test_versioned_document_import_checks_hash_mode_and_tamper", "tests.test_query202_human_adjudication_writer.HumanAdjudicationWriterTests.test_versioned_document_size_and_final_link_closure", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_mode_mutation_during_snapshot_closure_is_detected", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_source_and_workspace_private_hardlinks_fail_independent_audit"]
+symlink_parent_swap_or_toctou_tamper = ["tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_parent_directory_swap_to_symlink_fails_closed", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_builder_executes_staged_snapshot_despite_live_test_parent_aba", "tests.test_query202_human_adjudication_control_plane.HumanAdjudicationControlPlaneTests.test_test_attestation_publish_rejects_raced_temporary_replacement", "tests.test_query202_human_adjudication_control_plane.HumanAdjudicationControlPlaneTests.test_test_attestation_cleanup_preserves_raced_replacement", "tests.test_query202_human_adjudication.HumanAdjudicationWorkspaceTests.test_root_anchored_traversal_rejects_parent_symlink_swap", "tests.test_query202_human_adjudication.HumanAdjudicationWorkspaceTests.test_initialization_temp_leaf_replacement_cannot_redirect_private_writes", "tests.test_query202_human_adjudication_writer.HumanAdjudicationWriterTests.test_workspace_parent_swap_before_stage_validation_fails_closed", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_parent_directory_symlink_swap_is_detected", "tests.test_query202_human_adjudication_finalize.HumanAdjudicationFinalizeTests.test_compile_rejects_final_parent_symlink_swap_and_cleans_temp", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_builder_rejects_runtime_locator_retarget_to_same_target", "tests.test_query202_human_adjudication_writer.HumanAdjudicationWriterTests.test_lock_inode_replacement_before_exchange_fails_and_rolls_back", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_final_audit_artifact_ancestor_swap_fails_without_audit", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_final_audit_workspace_ancestor_swap_rolls_back_audit", "tests.test_query202_human_adjudication_finalize.HumanAdjudicationFinalizeTests.test_freeze_rejects_hardlink_directory_swap_and_cleans_temp", "tests.test_query202_human_adjudication_finalize.HumanAdjudicationFinalizeTests.test_freeze_preserves_raced_temp_replacement_and_rolls_back_link"]
+final_output_audit_or_freeze_inventory_tamper = ["tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_final_audit_rejects_inventory_mode_and_workspace_document_tamper", "tests.test_query202_human_adjudication_finalize.HumanAdjudicationFinalizeTests.test_failed_or_rebound_audit_cannot_freeze", "tests.test_query202_human_adjudication_finalize.HumanAdjudicationFinalizeTests.test_separate_freeze_binds_audit_and_never_mutates_existing_outputs", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_final_audit_rejects_compiled_output_hardlink", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_final_audit_rejects_noncontracted_directory_name_without_mutation", "tests.test_query202_human_adjudication_finalize.HumanAdjudicationFinalizeTests.test_compile_keeps_test_execution_closure_through_publication", "tests.test_query202_human_adjudication_finalize.HumanAdjudicationFinalizeTests.test_freeze_requires_exact_final_audit_check_summary", "tests.test_query202_human_adjudication_finalize.HumanAdjudicationFinalizeTests.test_freeze_rejects_post_audit_gate_workspace_and_output_link_tamper", "tests.test_query202_human_adjudication_finalize.HumanAdjudicationFinalizeTests.test_freeze_closure_rejects_deleted_replaced_chmoded_and_mutated_test_file", "tests.test_query202_human_adjudication_finalize.HumanAdjudicationFinalizeTests.test_freeze_post_link_closure_rolls_back_all_dependency_tamper"]
+implementation_bundle_drift = ["tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_available_generator_in_place_mutation_breaks_global_closure", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_registered_bundle_paths_are_exact_ordered_and_symlink_safe", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_generator_inventory_matches_workspace_and_independent_auditor", "tests.test_query202_human_adjudication_finalize.HumanAdjudicationFinalizeTests.test_compile_rejects_contaminated_auditor_cli_bundle"]
+test_command_file_order_count_or_result_drift = ["tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_builder_runs_the_exact_suite_and_accepts_no_claimed_result", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_attestation_verifier_rejects_every_bound_field_mutation", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_builder_rejects_skipped_expected_failure_and_unexpected_success_results", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_execution_dependency_manifest_rejects_drift", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_builder_rejects_python_runtime_drift_across_staged_execution", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_attestation_and_test_file_are_in_two_pass_snapshot_closure", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_execution_snapshot_matches_independent_auditor_and_binds_mode_nlink", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_auditor_requires_attestation_and_every_attested_test_file", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_auditor_runtime_closure_rejects_locator_retarget_to_same_target", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_test_attestation_or_bound_test_file_tamper_fails_independent_audit"]
+scientific_contract_or_lifecycle_gate_drift = ["tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_freeze_candidate_and_frozen_lifecycle_are_separate", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_status_flip_or_hash_fill_alone_cannot_enable_execution", "tests.test_query202_human_adjudication_preregistration.Query202HumanAdjudicationPreregistrationTests.test_implemented_state_without_verified_attestation_fails_closed", "tests.test_query202_human_adjudication_control_plane.HumanAdjudicationControlPlaneTests.test_test_attestation_command_refuses_candidate_and_frozen_rewrite", "tests.test_query202_human_adjudication.HumanAdjudicationWorkspaceTests.test_formal_initialization_and_validation_require_exact_preregistration_readiness", "tests.test_query202_human_adjudication_audit.IndependentHumanAdjudicationAuditTests.test_exact_formal_root_and_empty_execution_gate_are_required", "tests.test_query202_human_adjudication_finalize.HumanAdjudicationFinalizeTests.test_contract_capture_rejects_attestation_changed_around_semantic_report"]
+[execution_gate]
+unresolved_blockers = []
+status_change_alone_may_enable_execution = false
+
+[guards]
+workspace_initialized = false
+semantic_review_complete = false
+reviewed_semantic_ledger_frozen = false
+route_review_complete = false
+route_mapping_frozen = false
+product_identity_decided = false
+product_mapping_accepted = false
+event_mapping_created = false
+final_source_policy = false
+complete_intervention_coverage = false
+formal_action = false
+formal_episode = false
+zero_action_constructed = false
+formal_non_icu_rule = false
+formal_label = false
+formal_cohort = false
+patient_data_exported = false
+database_connected = false
+external_api_called = false
+llm_called = false

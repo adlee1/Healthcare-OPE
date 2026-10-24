@@ -1,0 +1,20 @@
+# D008/D010/D012: user-selected adapted five-model main experiment.
+# 500 factual predictions per cell is a local evaluation choice, not a paper N.
+# Table 2 explicitly uses 500 counterfactual annotations; bootstrap count is separate.
+rule_version = "llm-formal-main-plan-v1"
+scope = "formal_main_annotation_plan"
+network_calls = false
+selection_seed = "april-llm-review-v1"
+factual_pairs_per_cell = 500
+counterfactual_pairs_per_cell = 500
+counterfactual_budget_grid = [0, 100, 200, 300, 400, 500]
+factual_population = "behavior_validation"
+counterfactual_population = "behavior_train"
+selection_method = "ascending_sha256_without_outcome_or_model"
+same_pairs_across_models = true
+reuse_validated_pilot_requests = true
+model_adapted = true
+historical_author_snapshot_recovered = false
+full_five_paper_models = false
+formal_paper_annotation_budget = true
+paper_experiment_complete = false

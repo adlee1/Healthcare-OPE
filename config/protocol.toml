@@ -1,0 +1,53 @@
+schema_version = 1
+status = "draft"
+source = "User-supplied mandyam26a.pdf, 22 pages"
+dataset_version_intended = "MIMIC-IV 3.1 (paper reference, p.11)"
+dataset_version_verified = false
+dataset_version_declared = "3.1"
+dataset_version_evidence = "User explicitly confirmed 3.1 on 2026-10-11; database/source-file fingerprint verification is tracked separately"
+estimator_family = "DM and DM+, linear regression reward models (p.5 section 3.3)"
+unresolved_decisions = ["D001", "D002", "D003", "D004", "D005", "D006", "D007", "D008", "D009", "D010", "D011", "D012"]
+
+[potassium]
+actions = [0, 10, 20, 40]
+action_unit_as_printed = "mEq"
+reward_reference_range = [3.5, 4.5]
+reward_sigma_as_printed = 2.5
+reward_status = "Printed-formula main branch adopted 2026-10-11 (D001); Figure 4 source discrepancy remains open"
+f1_thresholds = [3.2, 5.0, 6.0]
+infusion_rate_as_printed_meq_per_hour = 10
+
+[sodium]
+actions = [0, 100, 200, 300, 400, 500]
+action_unit_as_printed = "mEq; raw-data conversion/discretization unresolved (D005)"
+reward_reference_range = [135.0, 145.0]
+reward_sigma_as_printed = 2.5
+f1_thresholds = [118.0, 135.0, 152.0, 169.0]
+infusion_rate_as_printed_meq_per_hour = 30
+
+[inputs]
+paper_appendix_a_features = ["age", "gender", "weight", "height", "heart_rate", "respiratory_rate", "spo2", "systolic_bp", "diastolic_bp", "creatinine", "nacl_0_9", "dextrose_5", "propofol", "norepinephrine", "insulin"]
+llm_vs_model_feature_mapping = "unresolved (D004)"
+context_time_definition = "unresolved (D003)"
+observed_outcome_definition = "next observed corresponding lab; matching tolerance unresolved (D003)"
+# Canonical display label and structured paper facts; neither selects the observed lab.
+llm_outcome_time = "3 hours after infusion concludes (p.5); zero-dose convention unresolved"
+llm_outcome_anchor_as_printed = "infusion_end"
+llm_outcome_offset_hours_as_printed = 3
+
+[evaluation]
+reference_kind = "observed target-cohort mean reward, proxy only"
+context_distribution = "unresolved (D006)"
+bootstrap_repetitions = 500
+bootstrap_protocol = "unresolved (D007)"
+main_annotation_budgets = [0, 100, 200, 300, 400, 500]
+paired_comparison_annotation_budget = 500
+regression_design = "unresolved (D011)"
+
+[llm]
+paper_model_names = ["o1", "gpt-4o-mini", "o3-mini", "Gemini 1.5", "Claude 3.7 Sonnet"]
+model_snapshots = "unresolved (D008)"
+prompt_status = "Figure 5 template and JSON contract recorded; final task-specific prompts and domain paragraph unresolved (D010)"
+response_keys_as_printed = ["predicted_lab_value", "justification"]
+predicted_lab_format_as_printed = "single_number_without_units"
+patient_data_calls_enabled = false

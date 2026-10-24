@@ -1,0 +1,55 @@
+rule_version = "clinical-baseline-v1"
+recorded_on = "2026-10-21"
+status = "adopted_for_local_point_baseline"
+author_hidden_settings_recovered = false
+paper_references = ["Section 3.3 linear reward model", "Section 3.4 behavior cloning"]
+
+[preprocessing]
+features = "the fifteen columns in decision_features.FEATURES only"
+continuous = "training median then training mean/population-standard-deviation scaling"
+binary = "gender F=0/M=1 and five medicines; training mode, ties choose0"
+empty_or_constant_columns = "omit per model, record why; legitimate unseen binary values remain valid"
+fit_population = "each individual model's training rows only"
+
+[policy]
+model = "sklearn.linear_model.LogisticRegression"
+solver = "lbfgs"
+penalty = "l2"
+fit_intercept = true
+C = 1.0
+tol = 0.0001
+max_iter = 1000
+random_state = 0
+class_weight = "none"
+single_class = "constant probability1 on observed class"
+no_context_columns = "intercept-only empirical training action frequencies"
+absent_training_actions = "zero probability in full paper action order"
+nonconvergence = "record failed convergence; do not treat policy or dependent DM as an estimated result"
+
+[reward]
+model = "sklearn.linear_model.LinearRegression"
+fit_intercept = true
+context_action_interactions = false
+action_encoding = "discrete paper action divided by40 forK or500 forNa"
+penalty = "none"
+rank_deficiency = "SVD minimum-norm least-squares; record rank and singular values"
+clip_predictions = false
+training_population = "behavior train events only"
+reward_formula = "main text sigma=2.5"
+
+[evaluation]
+policy_training = "behavior/target separately on respective train patients"
+policy_validation = "same role validation patients"
+d0 = "target validation empirical event distribution; event equal weights"
+reference = "observed reward mean on exactly the same target validation events, proxy only"
+reported_point_errors = "signed and absolute difference; not RMSE or causal-value error"
+empty_evaluation = "not_estimable with denominator0; keep original patient fold seed"
+bootstrap_datasets = 0
+bootstrap_status = "not performed by this point-baseline entry point; paper500 still pending"
+
+[execution]
+blas_threads = 1
+prediction_batch_size = 5000
+patient_rows_local_only = true
+external_llm_calls = false
+database_queries = false

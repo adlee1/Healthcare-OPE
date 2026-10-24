@@ -1,0 +1,58 @@
+schema_version = 1
+rule_version = "common-four-hour-pilot-v1"
+status = "adopted_for_common_opportunity_pilot"
+recorded_on = "2026-10-20"
+author_implementation_recovered = false
+formal_cohort_complete = false
+
+[time]
+anchor = "admittime + 4h*n, n>=1; full action window must end by discharge"
+context = "[t-4h,t], dynamic results available by t"
+action_window = "[t,t+4h)"
+outcome = "first corresponding specimen in (t+4h,t+24h], no later than discharge; invalid first group not skipped"
+location = "one named non-ICU transfer interval at t"
+prompt_time = "t + action/(10 for K, 30 for Na) hours + 3h; zero at t+3h; separate from observed outcome"
+additional_treatment_before_outcome = "flag and exclude from labeled pilot; applies to positive and zero"
+
+[population]
+admissions = "within declared source scope, any possible IV task exposure with a documented administration/start/confirmation status"
+opportunities_independent_of_window_action = true
+potassium_lab_item = 50971
+sodium_lab_item = 50983
+lab_scope_limitation = "secondary Chemistry item IDs not yet included"
+
+[potassium]
+sources = "subject-bucket eMAR; lexical potassium/KCl/KPhos in head, product description/other, pharmacy, prescription"
+quantity = "sum unique eMAR head product doses recorded in mEq during action window; head components not parent quantities"
+positive_dose_scope = "304 dose_usable named-head subset; unresolved non-head sources block zero"
+actions = [0, 10, 20, 40]
+outside_actions = "exclude, do not clip"
+carryover = "any possible IV K exposure in [t-4h,t) excludes BOTH positive and zero opportunities; no observed end claimed"
+continuous_unknown = "start/confirmation without a resolved measured K infusion remains unknown until recorded stop; never fill zero"
+
+[sodium]
+sources = "all eMAR linked to exact Sodium Chloride 3% (Hypertonic) prescriptions"
+quantity = "integrate closed, valid piecewise parent mL/hr intervals over action window, including carry-in; add supported Administered single-product quantities"
+conversion_meq_per_ml = 0.513
+is_rate_estimate = true
+actions = [0, 100, 200, 300, 400, 500]
+positive_discretization = "nearest positive action; ties lower; any positive quantity never becomes 0"
+outside_actions = "estimated dose >500 mEq excludes, not clipped"
+unclosed_or_ambiguous_stream = "unknown, including orphan confirmations/stops; cannot become zero"
+
+[zero]
+meaning = "no recorded relevant exposure in the declared source scope within a valid common opportunity"
+not_equivalent_to = "Not Given record, no new Started record, or proven absence of every possible treatment"
+unknown_dose_route_status_or_time = "exclude affected opportunity instead of assigning zero"
+unknown_control_carryover = "unknown/partial control remains unresolved through later windows until a supported stop"
+identity_mismatch = "preserve original head; if sole order admission is known and differs, add an unknown blocker there without assigning a dose"
+
+[execution]
+statement_timeout_ms = 120000
+source_row_cap = 30000
+opportunity_query_row_cap = 10000
+admissions_per_opportunity_query = 40
+read_only = true
+separate_query_snapshots = true
+patient_rows_local_only = true
+external_llm_calls = false

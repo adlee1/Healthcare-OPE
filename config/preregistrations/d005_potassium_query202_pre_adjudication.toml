@@ -1,0 +1,425 @@
+schema_version = 1
+component_id = "D005-K-QUERY202-PREADJUDICATION-EVIDENCE-v1"
+decision_id = "D005"
+status = "proposed"
+scope = "Read-only pre-adjudication extraction of complete local boundary and crosswalk evidence for potassium product review"
+rule_version = "k-query202-pre-adjudication-evidence-v1-proposed"
+specified_on = "2026-10-12"
+execution_status = "not_executed"
+execution_permitted = false
+implementation_state = "architecture_only"
+author_setting_recovered = false
+formal_product_mapping_enabled = false
+formal_source_policy_enabled = false
+
+[lifecycle]
+phase = "pre_adjudication_local_evidence"
+precedes_components = [
+  "frozen reviewed k-canonical-semantic-v1 ledger",
+  "frozen D005-K-ROUTE-ADJUDICATION-v2 mapping",
+  "D005-K-QUERY202-MAPPED-EVENT-APPLICATION-v1",
+]
+reviewed_semantic_ledger_is_input = false
+frozen_route_mapping_is_input = false
+external_ndc_lookup_is_input = false
+output_may_support_later_external_ndc_lookup = true
+event_mapping_or_clinical_selection_allowed = false
+same_snapshot_with_post_adjudication_lifecycle_claim_allowed = false
+
+[paper_boundary]
+target_intervention = "all IV potassium"
+action_values_meq = [0, 10, 20, 40]
+query202_is_paper_named = false
+architecture_is_project_choice = true
+
+[upstream_boundaries]
+query201_component_id = "D005-K-SOURCE-DISCOVERY-v1"
+query201_source_field_memberships = 33723
+query201_source_fields = [
+  "mimiciv_hosp.emar.medication",
+  "mimiciv_hosp.emar_detail.product_description",
+  "mimiciv_hosp.pharmacy.medication",
+  "mimiciv_hosp.prescriptions.drug",
+]
+query201_expected_nonnull_distinct_counts = [5045, 6692, 11059, 10927]
+query201_exact_set_match_required_per_source_field = true
+product_description_other_nonnull_exact_values = 842
+semantic_seed_expected_keys = 34565
+query200_candidate_heads = 719059
+query200_exact_memberships = 199
+query200_is_candidate_ceiling = false
+query200_only_filter_allowed = false
+q201_values_outside_query200_must_be_retained = true
+all_product_description_other_values_must_be_retained = true
+query200_null_description_local_code_evidence_must_be_retained = true
+
+[transaction]
+transaction_isolation = "repeatable read"
+transaction_read_only = true
+all_pre_adjudication_sql_statements_share_one_snapshot = true
+statement_timeout_ms = 120000
+per_statement_timeout_applies_to_every_unpartitioned_and_partitioned_sql = true
+explicit_rollback_required = true
+clean_psql_exit_required = true
+database_mutation_allowed = false
+temporary_tables_allowed = false
+temporary_views_allowed = false
+indexes_allowed = false
+functions_or_procedures_allowed = false
+session_database_objects_allowed = false
+artifacts_persist_only_after_rollback_and_clean_exit = true
+any_statement_timeout_or_failure_discards_entire_run = true
+cross_lifecycle_same_snapshot_claim_allowed = false
+
+[stages.202a]
+name = "typed boundary replay and complete semantic-seed construction"
+# The nine replayed fields include five semantic-key fields and four auxiliary
+# evidence fields. Only the five semantic fields enter the 34,565-key review
+# universe; route and NDC values never become product semantic keys.
+source_fields = [
+  "mimiciv_hosp.emar.medication",
+  "mimiciv_hosp.emar_detail.product_description",
+  "mimiciv_hosp.pharmacy.medication",
+  "mimiciv_hosp.prescriptions.drug",
+  "mimiciv_hosp.emar_detail.product_description_other",
+  "mimiciv_hosp.emar_detail.route",
+  "mimiciv_hosp.pharmacy.route",
+  "mimiciv_hosp.prescriptions.route",
+  "mimiciv_hosp.prescriptions.ndc",
+]
+statement_unit = "one source field per SQL statement"
+typed_null_and_nonnull_remain_distinct = true
+normalization_before_hash_allowed = false
+sampling_allowed = false
+semantic_filtering_allowed = false
+semantic_seed_fields = [
+  "mimiciv_hosp.emar.medication",
+  "mimiciv_hosp.emar_detail.product_description",
+  "mimiciv_hosp.pharmacy.medication",
+  "mimiciv_hosp.prescriptions.drug",
+  "mimiciv_hosp.emar_detail.product_description_other",
+]
+semantic_seed_contains_only_nonnull_exact_values = true
+semantic_seed_contains_review_decisions = false
+auxiliary_boundary_fields = [
+  "mimiciv_hosp.emar_detail.route",
+  "mimiciv_hosp.pharmacy.route",
+  "mimiciv_hosp.prescriptions.route",
+  "mimiciv_hosp.prescriptions.ndc",
+]
+product_description_other_sql_null_is_missing_evidence_not_semantic_key = true
+hash_match_unit = "each source field separately"
+
+[stages.202b]
+name = "complete detail product crosswalk evidence"
+selection_rule = "retain every emar_detail row with nonnull product_description, nonnull product_description_other, nonnull product_code, or an exact-linked eMAR head with nonnull medication"
+selection_may_use_query200_scope = false
+retain_full_typed_detail_tuple_and_multiplicity = true
+retain_parent_and_product_rows = true
+retain_product_description_product_description_other_product_code_route_and_ordinal = true
+adjudication_tuple_fields = [
+  "parent_field_ordinal",
+  "administration_type",
+  "complete_dose_not_given",
+  "dose_due",
+  "dose_due_unit",
+  "dose_given",
+  "dose_given_unit",
+  "will_remainder_of_dose_be_given",
+  "product_amount_given",
+  "product_unit",
+  "product_code",
+  "product_description",
+  "product_description_other",
+  "prior_infusion_rate",
+  "route",
+  "infusion_rate",
+  "infusion_rate_adjustment",
+  "infusion_rate_adjustment_amount",
+  "infusion_rate_unit",
+  "infusion_complete",
+  "completion_interval",
+  "new_iv_bag_hung",
+  "continued_infusion_in_other_location",
+  "restart_interval",
+  "non_formulary_visual_verification",
+]
+detail_to_head_identity_checked_with = ["subject_id", "emar_id", "emar_seq"]
+no_detail_and_detail_head_identity_conflict_counts_retained = true
+nonnull_emar_medication_heads_partition_into_with_detail_and_no_detail = true
+emar_medication_to_detail_bridge_required = true
+private_crosswalk_is_aggregated_after_identity_checks = true
+private_crosswalk_contains_patient_or_event_ids = false
+private_crosswalk_contains_timestamps = false
+head_cooccurrence_establishes_product_equivalence = false
+local_product_code_is_ndc = false
+patient_or_event_level_clinical_eligibility_may_be_inferred = false
+
+[stages.202c]
+name = "complete pharmacy and prescription order crosswalk evidence"
+selection_rule = "retain every pharmacy row with nonnull medication or reached by a prescription, eMAR-head pharmacy key, or detail pharmacy key; retain every prescription component"
+selection_may_use_query200_scope = false
+retain_full_typed_pharmacy_and_prescription_tuples_and_multiplicity = true
+retain_all_main_base_additive_components = true
+raw_ndc_retained_without_normalization_validation_or_external_lookup = true
+private_crosswalk_is_aggregated_after_identity_checks = true
+private_crosswalk_contains_patient_order_ids_or_timestamps = false
+subject_match_required_for_link_evidence = true
+nonnull_hadm_must_match_for_exact_link_evidence = true
+missing_and_conflicting_identity_evidence_remain_distinct = true
+poe_is_auxiliary_consistency_evidence = true
+pharmacy_or_poe_proves_episode = false
+pharmacy_to_prescription_bridge_required = true
+pharmacy_without_prescription_component_retained = true
+head_pharmacy_prescription_bridge_required = true
+detail_pharmacy_prescription_bridge_required = true
+head_and_detail_pharmacy_keys_are_separate_link_paths = true
+head_and_detail_pharmacy_keys_may_be_coalesced = false
+
+[route_boundary_reference]
+preflight_component_id = "D005-K-MAPPING-PREFLIGHT-v1"
+route_fields = [
+  "mimiciv_hosp.emar_detail.route",
+  "mimiciv_hosp.pharmacy.route",
+  "mimiciv_hosp.prescriptions.route",
+]
+expected_typed_set_sha256 = [
+  "a3b0d5664ae2e89f08df97f45347a6d7ae7761cdb2d138da781681ed2edd0ea9",
+  "2dad858bbbd41002d3a417faa302bda9bd0f85111d47cbd075a0802886ebd76b",
+  "b75209f1e0acea76a8c9818936b389a972def151317ede76073fc51dd65f1c0e",
+]
+expected_typed_distinct_counts = [18, 109, 109]
+expected_nonnull_distinct_counts = [17, 108, 108]
+hash_match_required_per_source_field = true
+cross_field_union_hash_may_substitute = false
+typed_sql_null_is_missing_not_unknown = true
+route_categories_are_not_assigned_in_this_lifecycle = true
+
+[auxiliary_boundary_reference]
+preflight_component_id = "D005-K-MAPPING-PREFLIGHT-v1"
+source_fields = [
+  "mimiciv_hosp.emar_detail.product_description_other",
+  "mimiciv_hosp.prescriptions.ndc",
+]
+expected_typed_set_sha256 = [
+  "0105f73cef307cc11b93e1d9d657d43a278c66c3c06ef31e5123db377e11dd4e",
+  "10e5ff7bb578ca66aadfe274105ed94a53487ba05d7b80e0ebca8fb8c24bab9e",
+]
+expected_typed_distinct_counts = [843, 6590]
+expected_nonnull_distinct_counts = [842, 6589]
+hash_match_required_per_source_field = true
+product_description_other_sql_null_is_missing_evidence = true
+ndc_normalization_before_hash_allowed = false
+
+[semantic_seed_lineage]
+key = ["source_field", "exact_raw_value"]
+expected_key_count = 34565
+q201_key_count = 33723
+product_description_other_key_count = 842
+hash_contract_version = "source-field-nonnull-exact-value-set-v1"
+hash_framing = "fixed domain and version bytes plus uint64be record count plus, in bytewise key order, uint32be source_field UTF-8 byte length and bytes plus uint64be exact value UTF-8 byte length and bytes"
+later_reviewed_ledger_requires_exactly_one_row_per_seed_key = true
+later_reviewed_ledger_must_record_seed_component_id = true
+later_reviewed_ledger_must_record_seed_manifest_sha256 = true
+later_reviewed_ledger_must_record_seed_key_set_sha256 = true
+later_reviewed_ledger_may_add_or_drop_keys = false
+sql_null_creates_semantic_seed_key = false
+
+[external_ndc_handoff]
+enabled_during_this_lifecycle = false
+private_ndc_export_required_after_success = true
+private_ndc_export_created = false
+ndc_export_preserves_typed_exact_local_value_and_order_context = true
+external_mapping_must_cite_pre_adjudication_manifest_sha256 = true
+external_mapping_must_cite_ndc_export_file_sha256 = true
+external_mapping_may_rewrite_local_exact_values = false
+external_mapping_result_is_not_a_database_snapshot = true
+external_mapping_result_does_not_accept_product_identity = true
+
+[[private_outputs]]
+name = "typed_boundary_replay"
+unit = "source field plus typed exact raw value"
+contains_raw_values = true
+
+[[private_outputs]]
+name = "semantic_key_seed"
+unit = "one nonnull exact key across the five semantic source fields"
+contains_raw_values = true
+
+[[private_outputs]]
+name = "detail_product_crosswalk"
+unit = "one exact typed adjudication tuple plus multiplicity after transient identity checks"
+contains_raw_values = true
+
+[[private_outputs]]
+name = "detail_seed_membership_bridge"
+unit = "one aggregated exact detail tuple to one semantic seed key plus multiplicity"
+contains_raw_values = true
+
+[[private_outputs]]
+name = "emar_medication_detail_bridge"
+unit = "one aggregated exact/missing/conflicting medication-to-detail evidence tuple plus multiplicity, including no-detail heads"
+contains_raw_values = true
+
+[[private_outputs]]
+name = "pharmacy_order_crosswalk"
+unit = "one aggregated exact typed pharmacy adjudication tuple plus multiplicity"
+contains_raw_values = true
+
+[[private_outputs]]
+name = "prescription_component_crosswalk"
+unit = "one aggregated exact typed prescription adjudication tuple plus multiplicity"
+contains_raw_values = true
+
+[[private_outputs]]
+name = "pharmacy_prescription_bridge"
+unit = "one aggregated compatible, missing or conflicting pharmacy-to-prescription tuple plus multiplicity"
+contains_raw_values = true
+
+[[private_outputs]]
+name = "head_pharmacy_prescription_bridge"
+unit = "one aggregated eMAR-head pharmacy-key path to order-context tuple plus link state and multiplicity"
+contains_raw_values = true
+
+[[private_outputs]]
+name = "detail_pharmacy_prescription_bridge"
+unit = "one aggregated detail pharmacy-key path to order-context tuple plus link state and multiplicity"
+contains_raw_values = true
+
+[[private_outputs]]
+name = "ndc_external_mapping_input"
+unit = "one typed exact NDC value with exact prescription context and multiplicity"
+contains_raw_values = true
+
+[artifact_policy]
+private_directory_mode = "0700"
+private_file_mode = "0600"
+git_ignored_required = true
+public_raw_values_allowed = false
+public_patient_event_order_identifiers_allowed = false
+public_per_value_or_per_event_hashes_allowed = false
+public_whole_private_file_hashes_allowed = true
+public_aggregate_counts_and_set_hashes_allowed = true
+
+[partition_plan]
+status = "unfrozen"
+unpartitioned_stage = "202a runs one complete statement per source field"
+partitioned_stages_if_needed = ["202b", "202c"]
+assignment_unit = "UNSET_REQUIRED_BEFORE_EXECUTION"
+partition_count = "UNSET_REQUIRED_BEFORE_EXECUTION"
+assignment_expression = "UNSET_REQUIRED_BEFORE_EXECUTION"
+selection_must_use_only_upstream_performance_evidence = true
+selection_must_not_use_product_review_or_downstream_results = true
+missing_duplicate_or_cross_partition_row_must_fail_closed = true
+partition_plan_requires_new_component_version_before_implementation = true
+mapped_event_application_64_bucket_plan_may_be_reused_implicitly = false
+
+[offline_merge]
+occurs_only_after_rollback_and_clean_exit = true
+uses_typed_exact_tuple_k_way_merge_across_all_preregistered_partitions = true
+same_exact_raw_tuple_across_partitions_is_merged_by_summing_uint64_multiplicity = true
+typed_null_and_nonnull_empty_string_remain_distinct = true
+tuple_hash_framing = "fixed domain and version plus record count plus field name, type tag, SQL NULL marker or exact UTF-8 length and bytes, ordered by encoded tuple bytes"
+global_tuple_set_sha256_recomputed_from_merged_unique_tuples = true
+global_tuple_frequency_sha256_recomputed_from_merged_tuples_and_uint64_multiplicity = true
+partition_set_or_frequency_hashes_may_be_added_concatenated_or_used_as_global_hash = false
+private_whole_file_hashes_recomputed = true
+public_per_value_per_tuple_or_per_event_hashes_allowed = false
+public_output_contains_only_named_denominators_set_hashes_whole_file_hashes_and_controls = true
+
+[implementation]
+state = "architecture_only"
+planned_sql_paths = [
+  "sql/profiling/202a_potassium_pre_adjudication_boundary.sql",
+  "sql/profiling/202b_potassium_pre_adjudication_detail_crosswalk_partition.sql",
+  "sql/profiling/202c_potassium_pre_adjudication_order_crosswalk_partition.sql",
+]
+planned_runner_paths = [
+  "src/april_repro/query202_pre_adjudication.py",
+  "scripts/run_potassium_query202_pre_adjudication.py",
+]
+planned_auditor_paths = [
+  "src/april_repro/query202_pre_adjudication_audit.py",
+  "scripts/audit_potassium_query202_pre_adjudication.py",
+]
+sql_bundle_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+runner_bundle_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+auditor_bundle_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+missing_planned_files_allowed_only_while_architecture_only = true
+
+[execution_gate]
+unresolved_blockers = [
+  "implemented and pinned 202a-202c SQL bundle",
+  "implemented and pinned runner bundle",
+  "implemented and pinned independent offline auditor bundle",
+  "synthetic timeout rollback privacy and conservation failure injection",
+  "independently preregistered partition key count and exact assignment expression in a new component version",
+  "pre-execution statement plan showing every SQL is bounded by 120 seconds",
+]
+status_change_alone_may_enable_execution = false
+database_execution_before_all_blockers_clear_fails_closed = true
+
+[guards]
+pre_adjudication_extraction_implemented = false
+pre_adjudication_extraction_executed = false
+reviewed_semantic_ledger_frozen = false
+route_mapping_frozen = false
+external_ndc_mapping_executed = false
+event_mapping_created = false
+product_identity_decided = false
+product_mapping_accepted = false
+final_source_policy = false
+complete_intervention_coverage = false
+formal_action = false
+formal_episode = false
+zero_action_constructed = false
+formal_non_icu_rule = false
+formal_label = false
+formal_cohort = false
+patient_data_exported = false
+llm_called = false
+
+[[evidence]]
+name = "product_mapping_preregistration"
+path = "config/preregistrations/d005_potassium_product_mapping.toml"
+file_sha256 = "960e0e68d848613d2b75c0e2a5afa6db9c853bdbf24a3a2f214bdcccb94df9ee"
+
+[[evidence]]
+name = "query200_manifest"
+path = "artifacts/profiling/20261011T174457.657508Z/manifest.json"
+file_sha256 = "76b9ae67d02081d634965906cb7c11a3671b2c69ac7e194252b996156ee099e6"
+
+[[evidence]]
+name = "query200_audit"
+path = "artifacts/profiling/20261011T174457.657508Z/audit-summary.json"
+file_sha256 = "73ca31b9556165ccb79e3d278812b4d0aec39aa75498327f452ca46fe6b9a31c"
+
+[[evidence]]
+name = "query201_manifest"
+path = "artifacts/profiling/20261011T182244.083389Z/manifest.json"
+file_sha256 = "fe13a910a590df49e26b8e71770735d100af7f9e474cf9769a619c0b2cc6fa44"
+
+[[evidence]]
+name = "query201_audit"
+path = "artifacts/profiling/20261011T182244.083389Z/audit-summary.json"
+file_sha256 = "a7aa9b35d4e408bbeda6b4e024588e3083fc7f13b976492b624d21a390946428"
+
+[[evidence]]
+name = "query201_private_discovery"
+path = "artifacts/profiling/20261011T182244.083389Z/potassium_full_source_vocabulary_discovery.discovery.json"
+file_sha256 = "62731e7dcadf82b95a55e3afd7f2790455320d1c642f9ca307b2574672760d18"
+
+[[evidence]]
+name = "mapping_preflight_manifest"
+path = "artifacts/profiling/20261011T190426.934406Z/manifest.json"
+file_sha256 = "bdfcb78849eadb1b9eafca226fe49c7e70390f45ee0f3ef34c8e92899557c880"
+
+[[evidence]]
+name = "mapping_preflight_audit"
+path = "artifacts/profiling/20261011T190426.934406Z/audit-summary.json"
+file_sha256 = "c96b7bed50a7b29ac7f8bfc14ed05b03394ad3c996d2c4b2c891ccbf964d024e"
+
+[[evidence]]
+name = "mapping_preflight_public_summary"
+path = "artifacts/profiling/20261011T190426.934406Z/potassium_mapping_preflight.aggregate-summary.json"
+file_sha256 = "079a8b774773a039977d21aad88e128d0d3658483268ded38aa931842fa2a220"

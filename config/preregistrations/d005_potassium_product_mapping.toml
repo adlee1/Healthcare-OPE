@@ -1,0 +1,432 @@
+schema_version = 1
+component_id = "D005-K-PRODUCT-MAPPING-v1"
+decision_id = "D005"
+status = "proposed"
+scope = "Private potassium product mapping and dual source-universe evidence after Query 201"
+rule_version = "k-product-mapping-dual-universe-v1-proposed"
+specified_on = "2026-10-12"
+specified_after = "Completed and independently audited Query 201 four-field local vocabulary discovery"
+specified_before = [
+  "real Query 202 database execution",
+  "external NDC mapping execution",
+  "D005 source-policy acceptance",
+  "recorded-dose or episode extraction",
+  "formal cohort",
+  "model training",
+  "LLM patient-data calls",
+  "downstream performance metrics",
+]
+author_setting_recovered = false
+validator_integration = "april_repro.preregistration:validate_potassium_product_mapping_preregistration"
+formal_product_mapping_enabled = false
+formal_source_policy_enabled = false
+
+[paper_facts]
+target_intervention = "all IV potassium"
+action_values_meq = [0, 10, 20, 40]
+salt_or_product_scope_disclosed = false
+product_mapping_rule_disclosed = false
+event_route_rule_disclosed = false
+kcl_is_complete_paper_scope = false
+
+[q201_baseline]
+source_value_memberships = 33723
+query200_overlap_memberships = 199
+negative_space_memberships = 33524
+all_source_policy_statuses = "unresolved"
+product_description_other_examined = false
+neutral_review_strata_are_inclusion_rules = false
+
+[local_schema]
+inventory_path = "artifacts/db/20261011T091753.638203Z/020_column_inventory.csv"
+verified_relations = [
+  "mimiciv_hosp.emar",
+  "mimiciv_hosp.emar_detail",
+  "mimiciv_hosp.pharmacy",
+  "mimiciv_hosp.prescriptions",
+]
+verified_mapping_fields = [
+  "mimiciv_hosp.emar.medication",
+  "mimiciv_hosp.emar_detail.product_code",
+  "mimiciv_hosp.emar_detail.product_description",
+  "mimiciv_hosp.emar_detail.product_description_other",
+  "mimiciv_hosp.emar_detail.route",
+  "mimiciv_hosp.pharmacy.medication",
+  "mimiciv_hosp.pharmacy.route",
+  "mimiciv_hosp.prescriptions.drug_type",
+  "mimiciv_hosp.prescriptions.drug",
+  "mimiciv_hosp.prescriptions.formulary_drug_cd",
+  "mimiciv_hosp.prescriptions.gsn",
+  "mimiciv_hosp.prescriptions.ndc",
+  "mimiciv_hosp.prescriptions.prod_strength",
+  "mimiciv_hosp.prescriptions.form_rx",
+  "mimiciv_hosp.prescriptions.route",
+]
+local_emar_product_code_is_ndc = false
+formulary_drug_cd_is_ndc = false
+prescriptions_ndc_is_external_ndc_candidate = true
+
+[private_ledger]
+schema_version = "k-product-ledger-v1"
+record_role = "source_evidence_lineage"
+primary_key = ["source_type", "evidence_path", "raw_name"]
+raw_key_is_exact = true
+normalization_establishes_identity = false
+canonical_semantic_key = ["source_field", "raw_name"]
+lineage_bridge_required = true
+evidence_path_creates_separate_semantic_decision = false
+query200_query201_same_source_field_raw_name_share_semantic_key = true
+cross_key_equivalence_requires_explicit_mapping_group_and_evidence = true
+initial_semantic_status = "uncertain"
+semantic_status_values = ["supported", "refuted", "uncertain"]
+vocabulary_semantic_dimensions = [
+  "product_identity",
+  "dosage_form",
+  "treatment_intent",
+  "potassium_content",
+  "meq_convertibility",
+]
+event_route_is_vocabulary_dimension = false
+separate_review_status_from_semantic_status = true
+private_file_mode = "0600"
+private_directory_mode = "0700"
+public_raw_values_allowed = false
+public_local_codes_or_ndcs_allowed = false
+
+[private_missing_value_evidence]
+role = "typed SQL NULL evidence that does not create a vocabulary semantic row"
+raw_value_states = ["nonnull", "null"]
+empty_string_state = "nonnull"
+null_string_sentinel_allowed = false
+null_creates_canonical_semantic_decision = false
+primary_key = [
+  "source_type",
+  "evidence_path",
+  "source_field",
+  "context_key_sha256",
+]
+context_key_input = "typed full private physical-row tuple plus multiplicity"
+context_key_is_private = true
+query200_null_detail_description_must_be_conserved = true
+
+[private_event_component_bridge]
+detail_component_key = [
+  "subject_id",
+  "emar_id",
+  "emar_seq",
+  "detail_reference_sha256",
+]
+semantic_membership_key = [
+  "subject_id",
+  "emar_id",
+  "emar_seq",
+  "detail_reference_sha256",
+  "source_field",
+  "raw_name",
+]
+detail_reference_hash_is_private = true
+multiple_semantic_keys_per_detail_retained = true
+semantic_memberships_are_separate_administered_components = false
+single_membership_uses_its_semantic_decision = true
+multiple_memberships_require_one_explicit_mapping_group = true
+mapping_group_requires_explicit_evidence = true
+normalization_or_string_similarity_establishes_mapping_group = false
+group_level_five_dimension_decision_required = true
+unresolved_or_conflicting_memberships_component_semantics = "all five dimensions uncertain"
+cross_membership_dimension_cherry_pick_allowed = false
+component_role_status_values = ["product", "nonproduct", "uncertain"]
+uncertain_role_is_possible_product_component = true
+nonproduct_component_domain_status = "no"
+component_role_conflict_fails_audit = true
+component_domain_status_values = ["yes", "no", "uncertain"]
+focal_component_yes_requires_all_required_dimensions_supported = true
+focal_component_no_requires_any_required_dimension_refuted = true
+focal_component_uncertain_otherwise = true
+head_reducer_unit = "physical detail component, never semantic membership row"
+no_possible_components_head_status = "uncertain"
+focal_head_yes_rule = "one or more focal-yes components and every other possible component is focal-yes or potassium-content-refuted"
+focal_head_no_rule = "one or more possible components, no focal-yes component, and every possible component is focal-no"
+focal_head_uncertain_rule = "all other component combinations"
+interference_head_yes_rule = "one or more interference-yes components"
+interference_head_no_rule = "one or more possible components and every possible component is interference-no"
+interference_head_uncertain_rule = "all other component combinations"
+focal_subset_of_interference_checked_at_component_and_head_levels = true
+
+[private_event_evidence]
+head_key = ["subject_id", "emar_id", "emar_seq"]
+head_key_is_private = true
+parent_field_ordinal_alone_is_unique_detail_key = false
+detail_reference_requires_full_raw_tuple_and_multiplicity = true
+route_evidence_categories = [
+  "missing",
+  "unknown_only",
+  "iv_only",
+  "iv_plus_unknown",
+  "noniv_only",
+  "noniv_plus_unknown",
+  "iv_noniv_conflict",
+  "iv_noniv_unknown_conflict",
+]
+event_route_supported_categories = ["iv_only"]
+event_route_refuted_categories = ["noniv_only"]
+event_route_uncertain_categories = [
+  "missing",
+  "unknown_only",
+  "iv_plus_unknown",
+  "noniv_plus_unknown",
+  "iv_noniv_conflict",
+  "iv_noniv_unknown_conflict",
+]
+event_route_status_values = ["supported", "refuted", "uncertain"]
+identity_chain_status_values = ["exact", "missing", "conflict"]
+administration_evidence_required_separately = true
+interference_candidate_is_administered_treatment = false
+domain_status_values = ["yes", "no", "uncertain"]
+dual_universe_statuses_are_not_vocabulary_level = true
+dual_universe_status_levels = ["physical_component", "event_head"]
+public_event_identifiers_allowed = false
+
+[dual_source_universes]
+focal_name = "focal_action_eligible"
+focal_role = "Strict product and event candidates for later recorded-dose audit"
+focal_requires_supported_product_identity = true
+focal_requires_supported_iv_compatible_dosage_form = true
+focal_requires_supported_repletion_intent = true
+focal_requires_supported_potassium_content = true
+focal_requires_explicit_event_level_iv_route = true
+focal_requires_identity_valid_record_chain = true
+focal_requires_supported_meq_convertibility = true
+focal_uncertain_enters_primary_action_domain = false
+focal_yes_requires_all_required_dimensions_supported = true
+focal_no_requires_any_required_dimension_refuted = true
+focal_uncertain_otherwise = true
+interference_name = "interference_candidate"
+interference_role = "Broad possible IV potassium universe for same-anchor and (anchor,label] treatment checks"
+interference_retains_possible_and_uncertain_iv_potassium = true
+interference_no_requires_affirmative_nonpotassium_or_event_noniv_evidence = true
+interference_yes_requires_supported_potassium_and_event_iv_evidence = true
+interference_yes_requires_identity_valid_record_chain = true
+interference_noniv_refutation_requires_identity_valid_record_chain = true
+interference_nonpotassium_refutation_requires_identity_valid_record_chain = false
+interference_uncertain_otherwise = true
+focal_must_be_subset_of_interference_per_event = true
+kcl_only_result_must_be_named_strict_kcl_subdomain = true
+
+[executable_reducer_contract]
+status = "proposed_offline_only"
+path = "src/april_repro/product_mapping_contract.py"
+file_sha256 = "27bd346a740eb2578431f2cda997d76439e2f5772a94bd8d9b0c060a26f0b11e"
+database_queried = false
+formal_mapping_enabled = false
+route_partition_states = 8
+semantic_dimensions = 5
+cross_membership_cherry_pick_allowed = false
+component_and_head_subset_invariant_enforced = true
+
+[query202_execution]
+status = "not_executed"
+local_sql_same_snapshot_only = true
+transaction_isolation = "repeatable read"
+transaction_read_only = true
+statement_timeout_ms = 120000
+same_snapshot_required = true
+explicit_rollback_required = true
+clean_psql_exit_required = true
+persist_private_values_only_after_rollback = true
+database_mutation_allowed = false
+temporary_database_objects_allowed = false
+print_controlled_vocabulary_values = false
+emit_patient_identifiers_or_timestamps = false
+phases = [
+  "complete product_description_other vocabulary and linkage",
+  "detail text-local-code crosswalk with parent/product structure and typed NULL evidence",
+  "identity-valid prescription identifier and component crosswalk",
+  "private per-event route evidence and canonical-semantic-key aggregate matrix",
+  "Q200/Q201 lineage and source-event conservation",
+]
+detail_crosswalk_association_unit = "same physical emar_detail row"
+head_cooccurrence_establishes_product_equivalence = false
+detail_to_emar_identity_fields = ["subject_id", "emar_id", "emar_seq"]
+event_to_order_requires_subject_match = true
+nonnull_hadm_must_match = true
+missing_hadm_is_separate_status = true
+poe_id_is_auxiliary_consistency_evidence = true
+prescription_components_must_all_be_retained = true
+link_flags_may_overlap = true
+mutually_exclusive_primary_link_status_required = true
+primary_link_status_unit = "emar head"
+primary_link_status_precedence_must_be_frozen_before_execution = true
+route_mapping_frozen = false
+route_mapping_and_normalization_hash_required_before_execution = true
+direct_detail_route_only_can_support_focal_iv = true
+pharmacy_or_prescription_route_can_support_focal_iv = false
+deterministic_bucket_plan_must_be_preregistered_if_needed = true
+bucket_plan_may_not_depend_on_downstream_results = true
+statement_timeout_failure_saves_no_private_values = true
+
+[external_ndc_mapping]
+status = "not_executed"
+only_candidate_local_field = "mimiciv_hosp.prescriptions.ndc"
+local_extraction_universe = "all distinct nonnull raw values"
+local_extraction_may_depend_on_text_or_link_success = false
+external_request_requires_preregistered_syntax_normalization = true
+invalid_format_status = "not_requested_invalid_format"
+rxnorm_get_ndc_properties_url = "https://rxnav.nlm.nih.gov/REST/ndcproperties"
+rxnorm_get_ndc_status_url = "https://rxnav.nlm.nih.gov/REST/ndcstatus"
+include_current_and_historical = true
+get_ndc_properties_format = "json"
+get_ndc_properties_ndcstatus = "ALL"
+get_ndc_status_format = "json"
+get_ndc_status_history = 0
+get_ndc_status_altpkg = 0
+record_request_utc_time = true
+record_release_or_response_version = true
+record_response_hash = true
+retain_zero_results = true
+retain_errors_and_retries = true
+retain_one_to_many_results = true
+patient_identifiers_or_event_times_exported = false
+drug_name_text_exported = false
+local_product_code_exported = false
+formulary_drug_cd_exported = false
+external_mapping_establishes_event_route = false
+external_mapping_establishes_administration = false
+
+[episode_and_dose_boundaries]
+different_emar_heads_may_be_dose_merged = false
+same_anchor_multiple_possible_heads = "collision"
+shared_pharmacy_or_poe_proves_one_episode = false
+four_hour_lag_is_episode_threshold = false
+four_hour_lag_role = "diagnostic_distribution_only"
+dose_given_component_sum_is_dose_due = false
+dose_due_plan_consistency_proves_completion = false
+completion_evidence_proves_component_dose = false
+
+[acceptance]
+query201_baseline_must_conserve = true
+product_description_other_full_nonnull_vocabulary_required = true
+every_ledger_key_unique = true
+every_canonical_semantic_key_unique = true
+evidence_lineage_to_semantic_key_complete = true
+nonnull_text_lineage_to_semantic_key_complete = true
+sql_null_evidence_never_creates_text_semantic_key = true
+sql_null_and_empty_string_remain_distinct = true
+query200_null_detail_description_must_conserve = true
+every_unresolved_value_remains_uncertain = true
+five_vocabulary_semantic_dimensions_must_remain_separate = true
+event_route_must_remain_in_private_event_table = true
+event_component_bridge_must_retain_all_semantic_memberships = true
+head_domain_reducers_must_use_physical_components = true
+multiple_semantic_memberships_must_not_count_as_multiple_components = true
+route_mapping_must_be_frozen_before_query202 = true
+overlapping_link_flags_and_primary_partition_both_required = true
+link_multiplicity_and_identity_conflicts_retained = true
+external_mapping_version_time_failures_and_cardinality_required = true
+local_product_codes_never_treated_as_ndc = true
+dual_universes_recomputable_from_semantic_component_and_event_tables = true
+focal_subset_of_interference_checked_per_event = true
+administration_status_gate_required_after_mapping = true
+independent_offline_audit_failures_required = 0
+mapping_gate_pass_does_not_accept_source_policy = true
+separate_source_policy_acceptance_artifact_required = true
+
+[change_control]
+selection_must_not_depend_on = [
+  "paper sample size",
+  "action distribution",
+  "label coverage",
+  "model accuracy",
+  "ope error",
+  "agreement with paper figures",
+]
+query202_before_execution_must_freeze = [
+  "SQL templates",
+  "runner",
+  "evidence_path enumeration",
+  "private source-ledger, missing-value, canonical-semantic, event-component-bridge and event-evidence schemas",
+  "executable reducer contract and hash",
+  "bucket plan if used",
+  "offline auditor",
+]
+downstream_artifacts_must_record = ["component_id", "rule_version", "config_sha256"]
+changing_mapping_contract_invalidates = [
+  "Query 202 mapping artifact",
+  "source-policy acceptance",
+  "episode and action extraction",
+  "cohort flow",
+  "labels",
+  "models",
+  "OPE results",
+]
+
+[guards]
+query202_executed = false
+product_mapping_accepted = false
+route_mapping_frozen = false
+administration_status_gate_frozen = false
+interference_candidate_is_administered_treatment = false
+product_identity_decided = false
+final_source_policy = false
+complete_intervention_coverage = false
+formal_action = false
+formal_episode = false
+zero_action_constructed = false
+formal_non_icu_rule = false
+formal_label = false
+formal_cohort = false
+patient_data_exported = false
+llm_called = false
+
+[[evidence]]
+name = "paper_metadata"
+path = "config/paper.toml"
+file_sha256 = "6653d2d6ef24815a244988dbbba76cf1967eb780941d2c53f608c1765422f2a5"
+supports = "Paper identity and frozen source content"
+
+[[evidence]]
+name = "local_column_inventory"
+path = "artifacts/db/20261011T091753.638203Z/020_column_inventory.csv"
+file_sha256 = "d0e486474f375c582a66c1bf08ec2a80557ce0dc22a9457aaee06764d820bc5b"
+supports = "Local existence, types and SELECT access for mapping fields"
+
+[[evidence]]
+name = "source_semantics"
+path = "docs/source-semantics.md"
+file_sha256 = "6f2432408dbb78b29433b226e45caf36ec271ada1a49032519001b50bae815c1"
+supports = "Officially sourced separation of eMAR, detail, pharmacy and prescriptions semantics"
+
+[[evidence]]
+name = "query200_manifest"
+path = "artifacts/profiling/20261011T174457.657508Z/manifest.json"
+file_sha256 = "76b9ae67d02081d634965906cb7c11a3671b2c69ac7e194252b996156ee099e6"
+supports = "Accepted five-source and local-code one-hop lineage"
+
+[[evidence]]
+name = "query200_audit"
+path = "artifacts/profiling/20261011T174457.657508Z/audit-summary.json"
+file_sha256 = "73ca31b9556165ccb79e3d278812b4d0aec39aa75498327f452ca46fe6b9a31c"
+supports = "Query 200 aggregate, privacy and conservation checks"
+
+[[evidence]]
+name = "query201_manifest"
+path = "artifacts/profiling/20261011T182244.083389Z/manifest.json"
+file_sha256 = "fe13a910a590df49e26b8e71770735d100af7f9e474cf9769a619c0b2cc6fa44"
+supports = "Accepted same-snapshot four-field vocabulary execution"
+
+[[evidence]]
+name = "query201_audit"
+path = "artifacts/profiling/20261011T182244.083389Z/audit-summary.json"
+file_sha256 = "a7aa9b35d4e408bbeda6b4e024588e3083fc7f13b976492b624d21a390946428"
+supports = "Query 201 independent offline audit"
+
+[[evidence]]
+name = "query201_public_summary"
+path = "artifacts/profiling/20261011T182244.083389Z/potassium_full_source_vocabulary_discovery.aggregate-summary.json"
+file_sha256 = "784c618be25f4e243f5bda89619bbb6d004c8eee10fc40b6327e311c83fc30ea"
+supports = "Query 201 counts, limitations, private input hash and false policy guards"
+
+[[evidence]]
+name = "query201_private_discovery"
+path = "artifacts/profiling/20261011T182244.083389Z/potassium_full_source_vocabulary_discovery.discovery.json"
+file_sha256 = "62731e7dcadf82b95a55e3afd7f2790455320d1c642f9ca307b2574672760d18"
+supports = "Private exact raw vocabulary input; content was not read while drafting this preregistration"

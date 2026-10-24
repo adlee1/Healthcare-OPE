@@ -1,0 +1,270 @@
+schema_version = 1
+component_id = "D005-K-QUERY202-MAPPED-EVENT-APPLICATION-v1"
+decision_id = "D005"
+status = "proposed"
+scope = "Read-only post-adjudication application of frozen potassium semantic and route mappings to components and event heads"
+rule_version = "k-query202-mapped-event-application-v1-proposed"
+specified_on = "2026-10-12"
+execution_status = "not_executed"
+execution_permitted = false
+implementation_state = "architecture_only"
+author_setting_recovered = false
+formal_product_mapping_enabled = false
+formal_source_policy_enabled = false
+
+[lifecycle]
+phase = "post_adjudication_mapped_event_application"
+predecessor_component_id = "D005-K-QUERY202-PREADJUDICATION-EVIDENCE-v1"
+requires_completed_independently_audited_predecessor = true
+requires_frozen_reviewed_semantic_ledger = true
+requires_frozen_route_mapping_v2 = true
+uses_new_repeatable_read_read_only_snapshot = true
+same_snapshot_with_pre_adjudication_lifecycle_claim_allowed = false
+cross_lifecycle_row_count_equality_implies_same_snapshot = false
+
+[paper_boundary]
+target_intervention = "all IV potassium"
+action_values_meq = [0, 10, 20, 40]
+query202_is_paper_named = false
+architecture_is_project_choice = true
+
+[transaction]
+transaction_isolation = "repeatable read"
+transaction_read_only = true
+all_post_adjudication_sql_statements_share_one_snapshot = true
+statement_timeout_ms = 120000
+per_statement_timeout_applies_to_every_unsharded_and_bucketed_sql = true
+explicit_rollback_required = true
+clean_psql_exit_required = true
+database_mutation_allowed = false
+temporary_tables_allowed = false
+temporary_views_allowed = false
+indexes_allowed = false
+functions_or_procedures_allowed = false
+session_database_objects_allowed = false
+artifacts_persist_only_after_rollback_and_clean_exit = true
+any_statement_timeout_or_failure_discards_entire_run = true
+cross_lifecycle_same_snapshot_claim_allowed = false
+
+[frozen_input_contract]
+pre_adjudication_manifest_path = "UNSET_REQUIRED_BEFORE_EXECUTION"
+pre_adjudication_manifest_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+pre_adjudication_audit_path = "UNSET_REQUIRED_BEFORE_EXECUTION"
+pre_adjudication_audit_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+pre_adjudication_semantic_seed_key_set_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+pre_adjudication_detail_crosswalk_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+pre_adjudication_order_crosswalk_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+reviewed_semantic_ledger_path = "UNSET_REQUIRED_BEFORE_EXECUTION"
+reviewed_semantic_ledger_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+reviewed_semantic_ledger_key_set_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+reviewed_semantic_ledger_expected_keys = 34565
+reviewed_semantic_ledger_review_complete = false
+reviewed_semantic_ledger_frozen = false
+reviewed_semantic_ledger_key_set_must_equal_pre_adjudication_seed = true
+route_mapping_artifact_path = "UNSET_REQUIRED_BEFORE_EXECUTION"
+route_mapping_artifact_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+route_mapping_normalization_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+route_mapping_review_complete = false
+route_mapping_frozen = false
+external_ndc_evidence_mode = "UNSET_REQUIRED_BEFORE_EXECUTION"
+external_ndc_evidence_manifest_path = "UNSET_REQUIRED_BEFORE_EXECUTION"
+external_ndc_evidence_manifest_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+external_ndc_mode_must_be_frozen_mapping_or_explicit_not_used = true
+all_input_artifact_hashes_verified_before_database_transaction = true
+
+[route_mapping_dependency]
+component_id = "D005-K-ROUTE-ADJUDICATION-v2"
+config_path = "config/preregistrations/d005_potassium_route_adjudication.toml"
+config_sha256 = "447a89548d21da739fb386fbcacab31f746747d5960386071a648009c1001e57"
+required_mapping_hash_contract_version = "source-specific-exact-route-mapping-v2"
+mapping_key = ["source_field", "raw_value_state", "exact_raw_value_when_nonnull"]
+mapping_values = ["iv", "noniv", "unknown"]
+typed_null_maps_to_event_missing_not_unknown = true
+complete_coverage_of_each_replayed_typed_set_required = true
+
+[input_replay]
+name = "new-snapshot exact input boundary replay"
+semantic_source_fields = [
+  "mimiciv_hosp.emar.medication",
+  "mimiciv_hosp.emar_detail.product_description",
+  "mimiciv_hosp.pharmacy.medication",
+  "mimiciv_hosp.prescriptions.drug",
+  "mimiciv_hosp.emar_detail.product_description_other",
+]
+expected_semantic_keys = 34565
+semantic_key_set_must_match_frozen_reviewed_ledger = true
+semantic_key_set_must_match_pre_adjudication_seed = true
+route_source_fields = [
+  "mimiciv_hosp.emar_detail.route",
+  "mimiciv_hosp.pharmacy.route",
+  "mimiciv_hosp.prescriptions.route",
+]
+route_typed_sets_must_match_frozen_route_mapping = true
+route_typed_sets_must_match_pre_adjudication_boundaries = true
+ndc_typed_set_must_match_pre_adjudication_boundary = true
+detail_crosswalk_set_hash_must_match_pre_adjudication_output = true
+order_crosswalk_set_hash_must_match_pre_adjudication_output = true
+normalization_before_replay_hash_allowed = false
+new_missing_or_changed_input_fails_closed = true
+matching_hashes_do_not_establish_same_snapshot = true
+
+[candidate_event_universe]
+reviewed_semantic_key_rule = "retain every reviewed key whose potassium_content is supported or uncertain"
+affirmative_nonpotassium_may_be_prefiltered = true
+other_refuted_or_uncertain_dimensions_may_prefilter = false
+q200_scope_is_candidate_ceiling = false
+q200_only_event_scan_allowed = false
+q201_supported_or_uncertain_keys_outside_q200_must_be_scanned = true
+product_description_other_supported_or_uncertain_keys_must_be_scanned = true
+query200_null_description_local_code_candidates_retained = true
+candidate_arrays_derive_only_from_frozen_reviewed_ledger = true
+candidate_selection_must_not_use_event_count_or_downstream_outcomes = true
+
+[stages.202d]
+name = "mapped physical components and event-head evidence"
+bucketed = true
+bucket_count = 64
+applies_frozen_semantic_ledger = true
+applies_frozen_route_mapping_v2 = true
+reextracts_components_from_current_post_adjudication_snapshot = true
+pre_adjudication_patient_rows_are_not_reused_as_current_snapshot = true
+direct_detail_route_is_only_positive_iv_support = true
+pharmacy_or_prescription_route_can_support_focal_iv = false
+route_partition_states = 8
+event_route_status_values = ["supported", "refuted", "uncertain"]
+identity_chain_status_values = ["exact", "missing", "conflict"]
+dual_universe_status_values = ["yes", "no", "uncertain"]
+administration_status_is_not_decided = true
+
+[stages.202e]
+name = "mapped component event and cross-lifecycle lineage conservation"
+bucketed = true
+bucket_count = 64
+every_private_primary_key_unique = true
+component_memberships_never_count_as_physical_components = true
+event_heads_unique_before_and_after_mapping = true
+primary_link_partition_sums_to_event_head_denominator = true
+route_partition_sums_to_event_head_denominator = true
+focal_yes_is_subset_of_interference_yes_at_component_and_head_levels = true
+bucket_counts_and_set_hashes_merge_to_named_unsharded_denominators = true
+pre_adjudication_hash_comparison_is_cross_lifecycle_lineage_not_same_snapshot = true
+q200_q201_comparison_is_cross_run_lineage_not_same_snapshot = true
+
+[primary_link_partition]
+unit = "emar head"
+overlapping_flags_retained = true
+primary_status_values_in_precedence_order = [
+  "identity_conflict",
+  "identity_missing",
+  "poe_conflict_auxiliary",
+  "poe_missing_auxiliary",
+  "exact_multiple_prescription_components",
+  "exact_single_prescription_component",
+]
+zero_compatible_prescription_components_is_identity_missing = true
+multiple_compatible_components_are_all_retained = true
+poe_does_not_override_exact_subject_admission_pharmacy_identity = true
+reducer_path = "src/april_repro/query202_contract.py"
+reducer_sha256 = "17eb1f1026eeb6c3ef465271246fda8794522b245b848449b9590f3569d0e01d"
+
+[bucket_plan]
+version = "d005-k-query202-subject-md5-v1"
+bucket_count = 64
+bucket_indices = [
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+  16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+  32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
+  48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
+]
+bucketed_stages = ["202d", "202e"]
+hash_prefix = "D005-K-QUERY202-v1|"
+hash_input = "ASCII prefix followed by canonical PostgreSQL bigint text"
+hash_algorithm = "MD5 used only for deterministic partition assignment"
+hash_projection = "first 15 lowercase hexadecimal digits interpreted as unsigned 60-bit integer"
+bucket_formula = "projected integer modulo 64"
+sql_expression = "CASE WHEN {subject_id} IS NULL THEN 0 ELSE mod((('x' || substr(md5('D005-K-QUERY202-v1|' || ({subject_id})::bigint::text), 1, 15))::bit(60)::bigint), 64)::integer END"
+assignment_unit = "subject_id so one subject cannot cross buckets"
+null_subject_bucket = 0
+all_indices_required_once = true
+missing_duplicate_or_cross_bucket_row_fails_closed = true
+bucket_counts_and_set_hashes_must_merge_to_named_unsharded_denominators = true
+performance_basis = "Query 200 eight buckets approached the 120-second limit, so the mapped application retains 64 deterministic buckets"
+
+[artifact_policy]
+private_directory_mode = "0700"
+private_file_mode = "0600"
+git_ignored_required = true
+public_raw_values_allowed = false
+public_patient_event_order_identifiers_allowed = false
+public_per_value_or_per_event_hashes_allowed = false
+public_whole_private_file_hashes_allowed = true
+public_aggregate_counts_and_set_hashes_allowed = true
+
+[implementation]
+state = "architecture_only"
+planned_sql_paths = [
+  "sql/profiling/202r_potassium_mapped_input_replay.sql",
+  "sql/profiling/202d_potassium_mapped_event_component_bucket.sql",
+  "sql/profiling/202e_potassium_mapped_event_conservation_bucket.sql",
+]
+planned_runner_paths = [
+  "src/april_repro/query202_mapped_event_application.py",
+  "scripts/run_potassium_query202_mapped_event_application.py",
+]
+planned_auditor_paths = [
+  "src/april_repro/query202_mapped_event_application_audit.py",
+  "scripts/audit_potassium_query202_mapped_event_application.py",
+]
+sql_bundle_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+runner_bundle_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+auditor_bundle_sha256 = "UNSET_REQUIRED_BEFORE_EXECUTION"
+missing_planned_files_allowed_only_while_architecture_only = true
+
+[execution_gate]
+unresolved_blockers = [
+  "completed and independently audited pre-adjudication evidence extraction",
+  "frozen reviewed 34,565-key semantic ledger with exact seed-key conservation",
+  "frozen complete D005-K-ROUTE-ADJUDICATION-v2 mapping",
+  "frozen external NDC evidence mode and artifact lineage",
+  "implemented and pinned input-replay plus 202d-202e SQL bundle",
+  "implemented and pinned runner and independent offline auditor bundles",
+  "synthetic timeout rollback privacy input-drift and conservation failure injection",
+]
+status_change_alone_may_enable_execution = false
+database_execution_before_all_blockers_clear_fails_closed = true
+
+[guards]
+mapped_event_application_implemented = false
+mapped_event_application_executed = false
+pre_adjudication_evidence_accepted = false
+reviewed_semantic_ledger_frozen = false
+route_mapping_frozen = false
+input_replay_passed = false
+event_mapping_created = false
+product_identity_decided = false
+product_mapping_accepted = false
+final_source_policy = false
+complete_intervention_coverage = false
+formal_action = false
+formal_episode = false
+zero_action_constructed = false
+formal_non_icu_rule = false
+formal_label = false
+formal_cohort = false
+patient_data_exported = false
+llm_called = false
+
+[[evidence]]
+name = "product_mapping_preregistration"
+path = "config/preregistrations/d005_potassium_product_mapping.toml"
+file_sha256 = "960e0e68d848613d2b75c0e2a5afa6db9c853bdbf24a3a2f214bdcccb94df9ee"
+
+[[evidence]]
+name = "route_adjudication_preregistration"
+path = "config/preregistrations/d005_potassium_route_adjudication.toml"
+file_sha256 = "447a89548d21da739fb386fbcacab31f746747d5960386071a648009c1001e57"
+
+[[evidence]]
+name = "mapping_preflight_public_summary"
+path = "artifacts/profiling/20261011T190426.934406Z/potassium_mapping_preflight.aggregate-summary.json"
+file_sha256 = "079a8b774773a039977d21aad88e128d0d3658483268ded38aa931842fa2a220"

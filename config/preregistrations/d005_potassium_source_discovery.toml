@@ -1,0 +1,186 @@
+schema_version = 1
+component_id = "D005-K-SOURCE-DISCOVERY-v1"
+decision_id = "D005"
+status = "proposed"
+scope = "Complete local potassium source vocabulary discovery before product identity or source policy"
+rule_version = "k-source-vocabulary-negative-space-v1-proposed"
+specified_on = "2026-10-12"
+specified_after = "Query 200 five-source lexical and one-hop local-code closure"
+specified_before = ["Query 201 real database execution", "product inclusion policy", "episode or dose extraction", "formal cohort", "model training", "LLM patient-data calls", "downstream performance metrics"]
+author_setting_recovered = false
+formal_source_policy_enabled = false
+formal_product_identity_enabled = false
+
+unresolved_dependencies = [
+  "D005 semantic-key product adjudication",
+  "D005 accepted IV potassium source policy",
+  "D005 source rows to recorded delivered action",
+  "D005 same-anchor and adjacent episode rule",
+  "D005 zero-action opportunity",
+  "D003 formal non-ICU interval",
+  "D003 formal label",
+]
+
+[paper_facts]
+target_intervention = "IV potassium"
+action_values_meq = [0, 10, 20, 40]
+salt_or_product_scope_disclosed = false
+source_fields_disclosed = false
+product_identity_rule_disclosed = false
+episode_rule_disclosed = false
+zero_action_rule_disclosed = false
+kcl_is_complete_paper_scope = false
+
+[discovery_universe]
+source_fields = [
+  "mimiciv_hosp.emar.medication",
+  "mimiciv_hosp.emar_detail.product_description",
+  "mimiciv_hosp.pharmacy.medication",
+  "mimiciv_hosp.prescriptions.drug",
+]
+enumerate_all_non_null_distinct_values = true
+sampling = false
+normalization = "trim-collapse-whitespace-lowercase-for-review-only"
+normalization_establishes_product_identity = false
+local_product_code_is_ndc = false
+complete_text_vocabulary_proves_intervention_coverage = false
+
+[execution]
+transaction_isolation = "repeatable read"
+transaction_read_only = true
+statement_timeout_ms = 120000
+same_snapshot_required = true
+explicit_rollback_required = true
+clean_psql_exit_required = true
+persist_private_values_only_after_rollback = true
+private_file_mode = "0600"
+print_controlled_vocabulary_values = false
+emit_patient_identifiers_or_times = false
+
+[lexical_review]
+mutually_exclusive_strata = [
+  "blank_after_trim",
+  "focal_kcl_repletion_hint",
+  "broader_phosphate_or_acetate_repletion_hint",
+  "other_potassium_salt_review",
+  "non_repletion_active_drug_hint",
+  "unresolved_potassium_lexical_review",
+  "no_declared_potassium_lexical_signal",
+]
+retain_independent_boolean_hints = true
+strata_are_inclusion_rules = false
+no_lexical_signal_is_exclusion = false
+focal_kcl_hint_is_product_identity = false
+
+[q200_baseline]
+candidate_emar_heads = 719059
+query199_direct_head_scope = 559191
+heads_new_beyond_direct_name = 159868
+identity_unresolved_only_heads = 472
+source_vocabulary_rows = 237
+seed_local_product_codes = 27
+detail_code_dictionary_names = 38
+nonexact_admission_link_heads = 16523
+q200_audit_checks = 18952
+q200_audit_failures = 0
+discovery_array_lengths = [23, 79, 45, 52]
+
+[acceptance]
+q200_discovery_arrays_are_exact_source_subsets = true
+q200_artifact_hashes_must_match = true
+source_values_unique_within_each_field = true
+every_value_has_exactly_one_review_stratum = true
+strata_conserve_each_source_and_global_totals = true
+private_vocabulary_artifact_required = true
+public_summary_aggregate_only = true
+unknown_or_conflicting_identity_fails_closed = true
+
+[change_control]
+selection_must_not_depend_on = ["paper_sample_size", "action_distribution", "label_coverage", "model_accuracy", "ope_error", "agreement_with_paper_figures"]
+downstream_artifacts_must_record = ["component_id", "rule_version", "config_sha256"]
+changing_discovery_contract_invalidates = ["Query 201 full vocabulary artifact", "source-policy ledger", "episode and action extraction", "cohort flow", "labels", "models", "OPE results"]
+
+[guards]
+product_identity_decided = false
+final_source_policy = false
+complete_intervention_coverage = false
+formal_action = false
+formal_episode = false
+zero_action_constructed = false
+formal_non_icu_rule = false
+formal_label = false
+formal_cohort = false
+patient_data_exported = false
+llm_called = false
+
+[[evidence]]
+name = "paper_metadata"
+path = "config/paper.toml"
+file_sha256 = "6653d2d6ef24815a244988dbbba76cf1967eb780941d2c53f608c1765422f2a5"
+supports = "Paper identity and frozen source content"
+
+[[evidence]]
+name = "query200_manifest"
+path = "artifacts/profiling/20261011T174457.657508Z/manifest.json"
+file_sha256 = "76b9ae67d02081d634965906cb7c11a3671b2c69ac7e194252b996156ee099e6"
+supports = "Accepted same-snapshot five-source run and execution controls"
+
+[[evidence]]
+name = "query200_audit"
+path = "artifacts/profiling/20261011T174457.657508Z/audit-summary.json"
+file_sha256 = "73ca31b9556165ccb79e3d278812b4d0aec39aa75498327f452ca46fe6b9a31c"
+supports = "18,952 aggregate conservation and privacy checks"
+
+[[evidence]]
+name = "query200_output"
+path = "artifacts/profiling/20261011T174457.657508Z/potassium_product_source_closure.csv"
+file_sha256 = "32995ac27f49e5fc9bac3893669f159916868382201a8a35197402f70bf7b66d"
+supports = "Accepted aggregate source vocabulary and event closure"
+
+[[evidence]]
+name = "query200_private_discovery"
+path = "artifacts/profiling/20261011T174457.657508Z/potassium_product_source_closure.discovery.json"
+file_sha256 = "316861627d7ec0bf3eb3b61873c3b94578ab949572751c8da280e1b925bb826a"
+supports = "Exact Query 200 source arrays and local-code dictionaries"
+
+[[evidence]]
+name = "query200_executed_sql"
+path = "artifacts/profiling/20261011T174457.657508Z/potassium_product_source_closure.executed.sql"
+file_sha256 = "7f04d0d67d6e97b3ab20a026c3c8edb98e47fd42aae4e7e617f359a6e0e04df2"
+supports = "Exact accepted Query 200 database execution"
+
+[[evidence]]
+name = "query201_emar_sql"
+path = "sql/profiling/201a_full_emar_medication_vocabulary.sql"
+file_sha256 = "977cd86cd25964859f762670833631761a6e638f527e2f95a085ea7b986ca600"
+supports = "Complete non-NULL eMAR medication vocabulary enumeration"
+
+[[evidence]]
+name = "query201_detail_sql"
+path = "sql/profiling/201b_full_detail_product_description_vocabulary.sql"
+file_sha256 = "2a6a8a25972ad0994de90911ad8140bbc90bb976554fd06f5a109847918e6494"
+supports = "Complete non-NULL eMAR product-description vocabulary enumeration"
+
+[[evidence]]
+name = "query201_pharmacy_sql"
+path = "sql/profiling/201c_full_pharmacy_medication_vocabulary.sql"
+file_sha256 = "f1289f83895ca6014b954c2292b932eaf4011256dd1276dc8d7c4804aa150933"
+supports = "Complete non-NULL pharmacy medication vocabulary enumeration"
+
+[[evidence]]
+name = "query201_prescription_sql"
+path = "sql/profiling/201d_full_prescription_drug_vocabulary.sql"
+file_sha256 = "91b2c915928618598a58279e7212f12a2875912c6387b40dda1efb70c2893675"
+supports = "Complete non-NULL prescription drug vocabulary enumeration"
+
+[[evidence]]
+name = "query201_runner_module"
+path = "src/april_repro/full_vocabulary_discovery.py"
+file_sha256 = "f23ae50a6fadea12bbc4f7e7b5cfa3fac5f37f125514ce85f7d1b69d706c578e"
+supports = "Same-snapshot transport, fail-closed validation, classification and privacy gates"
+
+[[evidence]]
+name = "query201_entrypoint"
+path = "scripts/run_potassium_full_vocabulary_discovery.py"
+file_sha256 = "7bdcb9ec62704617cf255918791fade2fee39a0a56125c6b91c65cf23bea2b39"
+supports = "Terminal-safe Query 201 entrypoint"

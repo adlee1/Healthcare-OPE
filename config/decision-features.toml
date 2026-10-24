@@ -1,0 +1,47 @@
+rule_version = "decision-features-v1"
+status = "adopted_for_pilot"
+paper_references = ["Section 3.1", "Section 3.4", "Appendix A", "Figure 5"]
+decision_ids = ["D003", "D004", "D005", "D011"]
+formal_cohort_complete = false
+
+[features]
+columns = [
+  "age", "gender", "weight_kg", "height_cm", "heart_rate",
+  "respiratory_rate", "spo2", "sbp", "dbp", "creatinine",
+  "administered_nacl_09", "administered_dextrose_5", "administered_propofol",
+  "administered_norepinephrine", "administered_insulin",
+]
+dynamic_window = "[decision_time - 4 hours, decision_time]"
+available_time = "storetime present, >= charttime, and <= decision_time"
+static_size = "latest explicit lbs/inches OMR strictly before decision date; no age limit"
+omr_available_time_limit = "OMR has no storetime; prior date is a proxy, not verified availability"
+vital_source = "ICU chartevents in the prior four hours; coverage does not establish ward vital availability"
+blood_pressure_source = "noninvasive only: 220179 and 220180"
+creatinine_source = "50912 Blood/Chemistry; 52546 not included"
+medication_encoding = "binary evidence of recorded actual administration in the four-hour window"
+medication_zero = "no confirmed or unresolved candidate in declared name/source rules"
+continuous_medication_limit = "no reconstruction of infusions begun before the four-hour window"
+missing_values = "preserve NULL in exported raw features; never fill a normal clinical value"
+future_training_missing_strategy = "fit continuous medians and binary modes only on each model's training subjects; report all-missing columns and omit them from that model"
+llm_missing_strategy = "explicit unknown; no numeric imputation"
+
+[splits]
+seed = "april-subject-fold-v1"
+validation_fraction = 0.2
+fold_unit = "subject; one deterministic hash assignment across tasks and cohort roles"
+gender = "F behavior; M target"
+comorbidity = "same-admission discharge ICD, retrospective group label only"
+renal = "MIT-LCP Charlson renal_disease code branch"
+cirrhosis = "ICD9 5712/5715/5716; ICD10 K703/K743/K744/K745/K746 prefixes"
+potassium_low_actions = [0, 10, 20]
+potassium_high_actions = [40]
+sodium_low_actions = [0, 100, 200]
+sodium_high_actions = [300, 400, 500]
+dosage_unit = "decision event; patients may contribute to both roles but never both folds"
+missing_group_value = "excluded from the corresponding split, retained in other splits"
+
+[execution]
+statement_timeout_ms = 120000
+max_eligible_events = 5000
+database_read_only = true
+external_patient_data_transfer = false

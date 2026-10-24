@@ -1,0 +1,34 @@
+schema_version = 1
+component_id = "D005-K-QUERY202-EXTRACTION-v1"
+decision_id = "D005"
+status = "superseded"
+execution_status = "never_executed"
+execution_permitted = false
+formal_product_mapping_enabled = false
+formal_source_policy_enabled = false
+specified_on = "2026-10-12"
+superseded_on = "2026-10-12"
+reason = "The single-snapshot architecture required reviewed semantic and route mappings before extracting the local crosswalk evidence needed to adjudicate those mappings."
+superseded_by = [
+  "D005-K-QUERY202-PREADJUDICATION-EVIDENCE-v1",
+  "D005-K-QUERY202-MAPPED-EVENT-APPLICATION-v1",
+]
+replacement_configs = [
+  "config/preregistrations/d005_potassium_query202_pre_adjudication.toml",
+  "config/preregistrations/d005_potassium_query202_mapped_event_application.toml",
+]
+cross_lifecycle_same_snapshot_claim_allowed = false
+
+[guards]
+query202_implemented = false
+query202_executed = false
+product_semantic_ledger_frozen = false
+route_mapping_frozen = false
+product_mapping_accepted = false
+final_source_policy = false
+formal_action = false
+formal_episode = false
+formal_label = false
+formal_cohort = false
+patient_data_exported = false
+llm_called = false

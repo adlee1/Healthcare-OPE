@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "april-reproduction"
+version = "0.1.0"
+description = "Independent, evidence-tracked reproduction of APRIL"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+april-repro = "april_repro.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

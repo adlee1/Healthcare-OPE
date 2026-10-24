@@ -1,0 +1,113 @@
+schema_version = 1
+component_id = "D005-K-QUERY202-NDC-EVIDENCE-MODE-v1"
+decision_id = "D005"
+status = "frozen"
+execution_status = "not_applicable"
+execution_permitted = false
+specified_on = "2026-10-13"
+rule_version = "k-query202-ndc-evidence-mode-v1-frozen"
+scope = "Freeze non-use of the complete Query 202 NDC handoff in current semantic adjudication"
+
+[source]
+artifact_directory = "artifacts/query202-adjudication-input/20261013T063022.591471Z"
+component_id = "D005-K-QUERY202-ADJUDICATION-INPUT-v1"
+config_file = "config/preregistrations/d005_potassium_query202_adjudication_input.toml"
+config_sha256 = "ed3f656243adbbf0060731e0ef6323b5dadb58e5c614691dd67eda97cd638f3d"
+manifest_file = "manifest.json"
+manifest_sha256 = "cd99bafbf5b8567edae8de1c1430a2b1e3ecb4501eb238190f59270b0bd717d6"
+aggregate_summary_file = "aggregate-summary.json"
+aggregate_summary_sha256 = "a10198946acf86a3a327d95eaa5eff53952275495b7befa59f7087d72e98644f"
+audit_file = "audit-summary.json"
+audit_sha256 = "07a442689e6be15c98f05a817737a67ca6c0637f176a68e68c75a7d36cadb851"
+component_status_required = "complete"
+source_status_at_execution_required = "frozen_for_execution"
+audit_status_required = "passed"
+audit_failed_checks_required = 0
+
+[source.ndc_handoff]
+file = "ndc-handoff.jsonl.gz"
+encoding = "gzip+utf8+ndjson-v1"
+stored_sha256 = "5a231724d29e163546c4c705459fe64bdc2448bedfac7205bb510fefeac7463d"
+stored_bytes = 3369595
+raw_sha256 = "02861f388c49015796ea3a8149b666c3a5b31e23af99dc230b2b0db15c4c950b"
+raw_bytes = 64497871
+records = 195944
+
+[decision]
+mode = "not_used_frozen"
+lifecycle_state = "frozen"
+effective = true
+used_in_current_semantic_adjudication = false
+external_mapping_artifact_required = false
+external_mapping_artifact_created = false
+external_api_called = false
+normalization_performed = false
+mapping_performed = false
+establishes_product_identity = false
+establishes_route = false
+establishes_administration = false
+
+[evidence_boundary]
+complete_handoff_retained_unchanged = true
+private_handoff_rows_may_be_read = false
+private_handoff_rows_may_be_printed = false
+database_access_allowed = false
+network_access_allowed = false
+external_api_allowed = false
+normalization_allowed = false
+mapping_allowed = false
+semantic_adjudication_may_consume_ndc = false
+artifact_directory_mode = "0700"
+evidence_file_mode = "0600"
+git_ignored_required = true
+public_raw_values_allowed = false
+public_per_value_hashes_allowed = false
+
+[change_control]
+input_hash_change_requires_new_component_version = true
+mode_change_requires_new_component_version = true
+future_ndc_mapping_requires_new_component_version = true
+future_ndc_use_requires_separate_frozen_decision = true
+handoff_must_remain_available_for_future_version = true
+downstream_code_must_not_infer_product_route_or_administration_from_nonuse = true
+
+[downstream_contract]
+decision_manifest_is_this_config = true
+consumer_component_id = "D005-K-QUERY202-MAPPED-EVENT-APPLICATION-v1"
+consumer_external_ndc_evidence_mode = "not_used_frozen"
+consumer_must_bind_component_id = true
+consumer_must_bind_config_sha256 = true
+consumer_must_bind_validator_bundle_sha256 = true
+consumer_must_require_status_frozen = true
+consumer_must_require_decision_effective = true
+consumer_must_reverify_source_whole_file_hashes = true
+consumer_must_not_read_handoff_rows_for_current_semantic_adjudication = true
+
+[implementation]
+bundle_encoding = "uint32be_path_length+path_utf8+uint64be_content_length+content"
+validator_paths = [
+  "src/april_repro/__init__.py",
+  "src/april_repro/query202_ndc_evidence_mode_preregistration.py",
+  "scripts/report_potassium_query202_ndc_evidence_mode.py",
+]
+validator_bundle_sha256 = "257300995bbae47a3fa3fd26b223b0842031de3093044f4ce9c0ae8e0b7c88bc"
+
+[guards]
+ndc_mode_frozen = true
+external_ndc_mapping_executed = false
+semantic_review_complete = false
+reviewed_semantic_ledger_frozen = false
+route_mapping_frozen = false
+product_identity_decided = false
+product_mapping_accepted = false
+event_mapping_created = false
+final_source_policy = false
+complete_intervention_coverage = false
+formal_action = false
+formal_episode = false
+zero_action_constructed = false
+formal_non_icu_rule = false
+formal_label = false
+formal_cohort = false
+patient_data_exported = false
+llm_called = false

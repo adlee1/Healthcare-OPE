@@ -1,0 +1,245 @@
+schema_version = 1
+component_id = "D005-K-QUERY202-ADJUDICATION-INPUT-v1"
+decision_id = "D005"
+status = "frozen_for_execution"
+execution_status = "not_executed"
+execution_permitted = true
+specified_on = "2026-10-13"
+rule_version = "k-query202-adjudication-input-v1-frozen"
+scope = "Offline lossless compilation of audited Query 202 A into private adjudication inputs"
+
+[input]
+artifact_directory = "artifacts/profiling/20261012T152323.460063Z"
+component_id = "D005-K-QUERY202-PREADJUDICATION-EVIDENCE-v2"
+config_file = "config/preregistrations/d005_potassium_query202_pre_adjudication_v2.toml"
+config_sha256 = "73004c1051970184b732b36a325e03c1f39e286356bcf56adbe799185e93ab73"
+manifest_file = "manifest.json"
+manifest_sha256 = "3f8ecece96c5cb15e37ad8b7a539f6e3642cb2de8eac1bcec926b94c86579e30"
+audit_file = "audit-summary.json"
+audit_sha256 = "b44ec99e0499b7d427ad9ffb468bb73988bfb0d94d672736569831eb997992ec"
+aggregate_summary_file = "potassium_query202_pre_adjudication.aggregate-summary.json"
+aggregate_summary_sha256 = "b74dd5053fe8a81a33064500e1616de4eeaefed97192968a84ba102473c3c369"
+executed_sql_file = "potassium_query202_pre_adjudication.executed.sql"
+executed_sql_sha256 = "a98719c4b702fe9bde7aa877740ed0f6bb8305bd38d67072f8a5116bd4ed4fc3"
+private_file = "potassium_query202_pre_adjudication.private.jsonl.gz"
+private_stored_sha256 = "4b9f389574b4a8aafc823a7f78a139563f63c092f8eb91af76a2175b082ae5bf"
+private_raw_sha256 = "ac39e21906c65e4186b2174298a880bd7cd5e8b30f8f3d79c79954e69c35103e"
+private_stored_bytes = 35008612
+private_raw_bytes = 1187294280
+private_records = 2126819
+audit_checks_total = 26403
+audit_checks_passed = 26403
+audit_checks_failed = 0
+
+[input.semantic_seed]
+records = 34565
+key_set_sha256 = "cee42c49d4618e6c62e99dcea26c53166f21305231b3c35991d2c2534b94368a"
+sql_null_keys = 0
+
+[input.crosswalk]
+unique_tuples = 2050833
+total_multiplicity = 412337146
+stage_202b_unique_tuples = 241097
+stage_202b_total_multiplicity = 248741597
+stage_202b_set_sha256 = "9875e7157f1c4d453eb97c8a0d767a759e14bc7aeb93a00007421db749839048"
+stage_202b_frequency_sha256 = "b323af112e6e4d992ca714a4a04e3225daf4b941d201ee3f9d8d9a4f81cfc4f6"
+stage_202c_unique_tuples = 1809736
+stage_202c_total_multiplicity = 163595549
+stage_202c_set_sha256 = "b9a8a2ef7a15b8fb6fd2e82541b51cb26028859881fc379005e401bcdc0ed8ed"
+stage_202c_frequency_sha256 = "a57edbba179631910f530dfddb288e1c992bd3ee940813020da9791386c7b0d0"
+
+[[tuple_kind]]
+stage = "202b"
+name = "detail_product_context"
+unique_tuples = 137579
+total_multiplicity = 84901924
+set_sha256 = "f955faa531cd72e172bacd99625dcd215cfe063e7a3bbd26f0cb7fffb34925d9"
+frequency_sha256 = "6debef0d4d367acefe6061c1619c08b5aa46596361a788781921e89a8a37dd55"
+output_partition = "local_evidence"
+
+[[tuple_kind]]
+stage = "202b"
+name = "detail_seed_membership_bridge"
+unique_tuples = 49648
+total_multiplicity = 38250029
+set_sha256 = "498092fe0b3e1ecc73a985d51e46728114502e38c191f95b4b2f2f1445f4233e"
+frequency_sha256 = "4228b5a06dd5bfa325bfecda2702fb67e0af007554b4e2f6712b3a51fcbce85e"
+output_partition = "local_evidence"
+
+[[tuple_kind]]
+stage = "202b"
+name = "emar_medication_detail_bridge"
+unique_tuples = 48825
+total_multiplicity = 84901924
+set_sha256 = "5ebcf437404b27bc4a97fff8733a62ad4433ddffc49af806c11be4b95c33d0d8"
+frequency_sha256 = "cce944d7cff62c6ccf3cdc8dd653c1b4516294cf9a6b208831d9e5c54f6e0317"
+output_partition = "local_evidence"
+
+[[tuple_kind]]
+stage = "202b"
+name = "emar_medication_head_partition"
+unique_tuples = 5045
+total_multiplicity = 40687720
+set_sha256 = "810050005b995e2c5545b96a8f66588c9a8af9ed190490404557b115eee43e4b"
+frequency_sha256 = "ba45eaacd8c36b947baa13d57d779eec34f5686ae5c02948ee3b188a47fdcdf6"
+output_partition = "local_evidence"
+
+[[tuple_kind]]
+stage = "202c"
+name = "detail_pharmacy_prescription_bridge"
+unique_tuples = 285516
+total_multiplicity = 46152769
+set_sha256 = "ae93a8ef4cc2323d446fa46d9d1906bd94ffdf72352258f421d62cf84f4a4ef9"
+frequency_sha256 = "8299a39b27ed7f277a259a17eb2d9cbbd3002b7737c6ee4d003cbb6853bb385a"
+output_partition = "local_evidence"
+
+[[tuple_kind]]
+stage = "202c"
+name = "head_pharmacy_prescription_bridge"
+unique_tuples = 172567
+total_multiplicity = 38758346
+set_sha256 = "3f3cf1362c235846281be8ecb237c658917a924c30f87267e5b0e4b9973583ed"
+frequency_sha256 = "1de3c43b69ec96fd90d43c5ce9c82d5af4184dc790c191b898e250f18842011f"
+output_partition = "local_evidence"
+
+[[tuple_kind]]
+stage = "202c"
+name = "ndc_external_mapping_input"
+unique_tuples = 189348
+total_multiplicity = 20259179
+set_sha256 = "37a0f1e6854c44ac805737bfdc777e4338c12e1a681c15e595945f0d1068f121"
+frequency_sha256 = "0a9e17658c2b8db566289bef1a7729e573b3ed52f5bcfb6d05a280c1a6299c48"
+output_partition = "ndc_handoff"
+
+[[tuple_kind]]
+stage = "202c"
+name = "pharmacy_no_prescription_component"
+unique_tuples = 89
+total_multiplicity = 30504
+set_sha256 = "7c03bb9d1fab5db66641e5a840e542696d8368909c96a590daa7549c454cba6e"
+frequency_sha256 = "e59e4db772a475ec8bb53634d5935eefc3b8f2e3e4fee7b6b72d56a5e2ce1ece"
+output_partition = "local_evidence"
+
+[[tuple_kind]]
+stage = "202c"
+name = "pharmacy_prescription_bridge"
+unique_tuples = 236630
+total_multiplicity = 20292611
+set_sha256 = "f149d62b86ddd726f7aa313f14414d2832bdfedad6e2d049f70202f18d36ab89"
+frequency_sha256 = "b592b40eda6fadef369d8d5a970f434c7dfbe5b539dd822af358f1edf69d3c88"
+output_partition = "local_evidence"
+
+[[tuple_kind]]
+stage = "202c"
+name = "pharmacy_product_context"
+unique_tuples = 717377
+total_multiplicity = 17809529
+set_sha256 = "78c74457e5e5b7f33b6cadc078327b97be12145fc16636c234817283905dd3f9"
+frequency_sha256 = "1db32cd0eb0c4cf81a5bc5aa1e43b91682682d2a7a9fa6cb4dae053c6410ab33"
+output_partition = "local_evidence"
+
+[[tuple_kind]]
+stage = "202c"
+name = "prescription_identifier_context"
+unique_tuples = 208209
+total_multiplicity = 20292611
+set_sha256 = "6832faad82b24e1be86484c24891e73d08c901359da1ec80ce609664179f01c1"
+frequency_sha256 = "909f820e74e3524e49eae7285b41f6f89ce28298d47f03f851281f10512ef5f0"
+output_partition = "local_evidence"
+
+[output]
+artifact_parent = "artifacts/query202-adjudication-input"
+semantic_file = "semantic-review-template.jsonl.gz"
+local_evidence_file = "local-evidence.jsonl.gz"
+route_file = "route-review-template.jsonl.gz"
+ndc_file = "ndc-handoff.jsonl.gz"
+summary_file = "aggregate-summary.json"
+manifest_file = "manifest.json"
+audit_file = "audit-summary.json"
+encoding = "gzip+utf8+ndjson-v1"
+gzip_members = 1
+gzip_mtime = 0
+private_ndjson_canonical_json = "sort_keys=true,separators=comma-colon,ensure_ascii=false,newline=true"
+semantic_records = 34565
+local_evidence_tuples = 1861485
+local_evidence_multiplicity = 392077967
+route_canonical_nonnull_values = 117
+route_nonnull_memberships = 233
+route_sql_null_memberships = 3
+route_typed_memberships = 236
+ndc_candidates = 6589
+ndc_sql_null_boundary_records = 1
+ndc_context_tuples = 189348
+ndc_context_multiplicity = 20259179
+
+[review_contract]
+semantic_dimensions = ["product_identity", "dosage_form", "treatment_intent", "potassium_content", "meq_convertibility"]
+semantic_initial_status = "uncertain"
+semantic_initial_review_status = "unreviewed"
+semantic_mapping_group_initially_null = true
+route_allowed_decisions = ["iv", "noniv", "unknown"]
+route_nonnull_initial_decision = "unknown"
+route_nonnull_initial_review_status = "unreviewed"
+route_sql_null_state = "missing"
+route_sql_null_is_unknown = false
+normalization_allowed = false
+automatic_classification_allowed = false
+cooccurrence_establishes_identity = false
+
+[ndc_mode]
+handoff_required = true
+mode_at_compilation = "pending"
+allowed_frozen_modes = ["mapped_frozen", "not_used_frozen"]
+sql_null_is_candidate = false
+normalization_allowed = false
+external_api_allowed = false
+external_api_called = false
+mapping_establishes_product_identity = false
+
+[execution]
+database_access_allowed = false
+network_access_allowed = false
+external_api_allowed = false
+input_and_output_hashes_rechecked_before_success = true
+atomic_private_writes_required = true
+failure_keeps_private_partial_outputs = false
+
+[privacy]
+directory_mode = "0700"
+file_mode = "0600"
+git_ignored_required = true
+private_raw_values_allowed = true
+public_raw_values_allowed = false
+public_per_value_hashes_allowed = false
+patient_admission_event_order_identifiers_allowed = false
+event_or_order_timestamps_allowed = false
+
+[implementation]
+bundle_encoding = "uint32be_path_length+path_utf8+uint64be_content_length+content"
+compiler_paths = ["src/april_repro/__init__.py", "src/april_repro/query202_adjudication_input_preregistration.py", "src/april_repro/query202_adjudication_input.py", "scripts/compile_potassium_query202_adjudication_input.py"]
+auditor_paths = ["src/april_repro/__init__.py", "src/april_repro/query202_adjudication_input_audit.py", "scripts/audit_potassium_query202_adjudication_input.py"]
+compiler_bundle_sha256 = "0e9ae039b3c3484baf3cbcdd3665ebd7f07fc37d31406921f20e6d6cede163aa"
+auditor_bundle_sha256 = "931263c491aa4d3b24bdc8acf40d22ef282d9aa819f1ebd9ed37e04c0838c065"
+
+[guards]
+adjudication_input_compiled = false
+adjudication_input_audited = false
+semantic_review_complete = false
+reviewed_semantic_ledger_frozen = false
+route_review_complete = false
+route_mapping_frozen = false
+ndc_mode_frozen = false
+external_ndc_mapping_executed = false
+product_identity_decided = false
+product_mapping_accepted = false
+event_mapping_created = false
+final_source_policy = false
+complete_intervention_coverage = false
+formal_action = false
+formal_episode = false
+zero_action_constructed = false
+formal_non_icu_rule = false
+formal_label = false
+formal_cohort = false
+patient_data_exported = false
+llm_called = false

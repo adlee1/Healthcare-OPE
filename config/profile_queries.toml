@@ -1,0 +1,248 @@
+schema_version = 1
+
+[[queries]]
+name = "potassium_medication_scope"
+file = "sql/profiling/199_potassium_medication_scope.sql"
+scope = "aggregate"
+max_rows = 10000
+work_mem_mb = 128
+description = "Full potassium-token medication-name, status, link and order-route scope audit"
+completeness = "No sampling. A monotone existing-index walk enumerates all non-NULL eMAR medication names, then retrieves every head whose name contains potassium or a bounded KCl token. Raw and normalized selected names, neutral ingredient strata, event-status classes and identity-validated order-route patterns are reported with direct per-scope distinct counts. Pharmacy rows and prescription components are independently preaggregated by pharmacy_id before the head join, so component multiplicity cannot expand eMAR heads. NULL medication heads are counted but their product rows are not examined; unrecognized brands, nonlexical product sources and combination products outside the declared name scope remain uncovered. Order routes do not prove administration. No eMAR detail/product identity, source inclusion policy, dose, action, zero action, episode, non-ICU rule, label or cohort is constructed. No patient identifiers, timestamps, laboratory values or patient text are emitted."
+
+[[queries]]
+name = "potassium_assumed_rate_lab_timing"
+file = "sql/profiling/198_potassium_assumed_rate_lab_timing.sql"
+scope = "aggregate"
+max_rows = 10000
+work_mem_mb = 128
+description = "Fixed-rate proxy clock and potassium lab-selector timing sensitivity audit"
+completeness = "Recomputes the conservative 194 candidates over the same fixed SYSTEM 1 percent eMAR page sample and restricts the proxy analysis to the 10/20/40 mEq paper-value candidates. eMAR charttime is only an administration-record anchor; the assumed 10 mEq/hour clock, proxy end and end-plus-three-hour target are unobserved sensitivity-analysis constructs. First-after and nearest selectors choose specimen charttime before any value, unit or storetime quality assessment and retain every row tied at every selected timestamp; nearest retains all equidistant timestamp groups. Latest-valid-available selectors use only the declared charttime/storetime availability gate, with no-end-gate and strict-post-proxy-end variants reported separately. Post-selection quality separates missing from nonfinite values and reports timestamp-group finite-value conflicts and 50971/52610 item patterns without emitting values. Lag summaries and fixed buckets use selected timestamp groups only; no-selected-timestamp candidate-selector rows remain exhaustively reported by selector_status and are not part of the lag denominator. Intervening-candidate counts cover only conservative candidates found in the fixed 1 percent page sample, so their coverage is explicitly incomplete. No identifiers, timestamps or lab values are emitted. The page sample is not representative or shared with another statement, no maximum lag is imposed, no selector is adopted or recovered as the paper label, and no actual dose or action, observed treatment start or end, episode, cohort, formal non-ICU rule, feature or label is constructed."
+
+[[queries]]
+name = "potassium_candidate_record_chains"
+file = "sql/profiling/197_potassium_candidate_record_chains.sql"
+scope = "aggregate"
+max_rows = 10000
+work_mem_mb = 128
+description = "Candidate-specific full eMAR pharmacy and strict-POE timestamp-group evidence"
+completeness = "Recomputes the conservative 194 source candidates over the same fixed SYSTEM 1 percent eMAR page sample, then retrieves complete eMAR streams for each distinct candidate pharmacy_id and only fully identity-consistent prescription/POE keys. Previous, anchor and first strictly later timestamp groups retain every tie and do not skip Confirmed, another administration/start, nonterminal, Not Given or unknown states to find a later stop. Candidate detail completion/rate fields, pharmacy/prescription start-stop controls and POE pointers are diagnostics only. The same-admission sequence covers only sampled candidate anchors, not complete medication history. No gap threshold, episode, observed start/end, rate integral, delivered dose, zero action, formal non-ICU rule, label or cohort is constructed."
+
+[[queries]]
+name = "potassium_candidate_intersection"
+file = "sql/profiling/196_potassium_candidate_intersection.sql"
+scope = "aggregate"
+max_rows = 10000
+work_mem_mb = 128
+description = "Single-statement potassium source-dose candidate, location and lab intersection audit"
+completeness = "Same fixed SYSTEM 1 percent eMAR page sample and seed as 194/195. One read-only statement recomputes the conservative 194 source-dose candidates and intersects them at event level with 195-style anchor-point and full [anchor-4h,anchor) transfer coverage, pre-anchor potassium/creatinine availability, and first strictly post-anchor potassium diagnostics. Any-finite stages are diagnostic existence checks only: they do not select a unique value or establish feature or label eligibility. Parent completeness evidence remains explicit-negative versus unknown; lab units, timestamp ties, missing/nonfinite values and storetime anomalies remain explicit. The component sum is not accepted actual dose or action, 60/80 mEq remain outside the paper action values, and no zero action, treatment episode or endpoint, formal non-ICU rule, baseline feature rule, post-infusion label or cohort is constructed."
+
+[[queries]]
+name = "potassium_dose_candidates"
+file = "sql/profiling/194_potassium_dose_candidates.sql"
+scope = "aggregate"
+max_rows = 10000
+work_mem_mb = 128
+description = "Potassium event-level component-dose evidence and conservative source-candidate states"
+completeness = "Same exact-name SYSTEM 1 percent seed as 191/192 with complete detail and independent route evidence. Product dose_given components are summed only when every component is numeric, strictly positive mEq and structural/identity checks pass; explicit-IV evidence with a TAB/PKT product form is blocked. Parent dose_due remains planned amount evidence. Parent completion flags are canonical; product-row flags are anomalies, and missing/other is not negative. Exact 60/80 and other positive sums remain outside the paper action values; zero, Not Given and missing rows never create the zero action. Description-strength consistency uses a finite local vocabulary, not an external label or NDC. Candidate issues overlap and must not be summed. No actual dose, episode merge, non-ICU rule, label or formal action accepted."
+
+[[queries]]
+name = "potassium_time_location_lab"
+file = "sql/profiling/195_potassium_time_location_lab.sql"
+scope = "aggregate"
+max_rows = 10000
+work_mem_mb = 128
+description = "Potassium administration-anchor, pre-four-hour location and K/creatinine lab availability audit"
+completeness = "Same exact-name SYSTEM 1 percent seed as 191/192. eMAR charttime is an administration-record anchor, not a validated infusion start or end. Anchor-point and full [anchor-4h,anchor) transfer coverage use half-open intervals and preserve ICU, gaps, overlap, unknown and invalid records. Complete provisional non-ICU coverage means every atomic time segment has exactly one named non-ICU interval and may include a contiguous change between named non-ICU careunits. Pre-window Blood/Chemistry K 50971/52610 and creatinine 50912/52546 require same non-NULL subject/admission and separately report storetime availability; availability does not guarantee a finite numeric value. The first K specimen timestamp strictly after the anchor has no maximum lag and retains all ties across both K itemids; it is not a post-infusion label. Prescription/detail time fields are diagnostics only. No dose, episode, formal non-ICU cohort or label rule accepted."
+
+[[queries]]
+name = "potassium_product_semantics"
+file = "sql/profiling/192_potassium_product_semantics.sql"
+scope = "aggregate"
+max_rows = 10000
+work_mem_mb = 128
+description = "Potassium component-dose, parent due and description-strength consistency diagnostics"
+completeness = "Same exact-name SYSTEM 1 percent seed as 191 with complete details and independent route evidence. Finite observed product-description dictionary only; strength is not externally label-verified. Parent dose_due, individual product dose_given, component sums and description-strength times product_amount stay distinct diagnostic quantities, never accepted actual doses. Repeated values alone are not duplicates. Ordinal/code counts, identity/time/pharmacy failures, incomplete-dose and remainder flags are retained. Unmapped descriptions, code values, identifiers, patient times and raw free text are not output. No final cohort or action mapping."
+
+[[queries]]
+name = "potassium_source_coverage"
+file = "sql/profiling/193_potassium_source_coverage.sql"
+scope = "aggregate"
+max_rows = 10000
+work_mem_mb = 128
+description = "Full eMAR potassium-token/KCl source-name and head-order coverage"
+completeness = "No sampling. A monotone existing-index walk enumerates non-NULL medication names; selected potassium/KCl lexical names retrieve all matching heads. Two exact names, other lexical names and their union have independent distinct counts, not additive subject/admission totals. Other active ingredients and route-name hints are vocabulary diagnostics only. Unique pharmacy keys and preaggregated prescription components prevent head multiplication; route evidence requires identity agreement but remains order evidence, not actual IV administration. No detail rows, dose, location or outcome eligibility examined. Unrecognized brands/synonyms outside literal scope are not exhausted; no cohort accepted."
+
+[[queries]]
+name = "source_fingerprint"
+file = "sql/profiling/100_source_fingerprint.sql"
+scope = "aggregate"
+max_rows = 10
+description = "Small-table exact row-count consistency fingerprint"
+completeness = "Exact counts of five named small relations only; not an APRIL cohort count or independent release authentication. User confirmed MIMIC-IV 3.1 on 2026-10-11."
+
+[[queries]]
+name = "source_indexes"
+file = "sql/profiling/110_source_indexes.sql"
+scope = "metadata"
+max_rows = 1000
+description = "Available indexes for reviewed source tables"
+completeness = "All catalog indexes for the named source relations in the current database snapshot. Index presence is not proof of query performance or clinical validity."
+
+[[queries]]
+name = "lab_dictionary"
+file = "sql/profiling/120_lab_dictionary.sql"
+scope = "dictionary"
+max_rows = 100
+description = "Electrolyte and creatinine dictionary candidates"
+completeness = "Complete dictionary matches for exact case-insensitive labels potassium, sodium, creatinine across specimen types; final outcome mapping remains open."
+
+[[queries]]
+name = "emar_medication_sample"
+file = "sql/profiling/130_emar_medication_sample.sql"
+scope = "aggregate"
+max_rows = 2000
+description = "Medication and event vocabulary from a fixed eMAR page sample"
+completeness = "SYSTEM 1 percent page sample with REPEATABLE(20261011); lexical candidates only. Counts are sampled rows, not population counts, eligible administrations, or an unbiased prevalence estimate."
+
+[[queries]]
+name = "prescription_product_sample"
+file = "sql/profiling/140_prescription_product_sample.sql"
+scope = "aggregate"
+max_rows = 3000
+description = "Candidate order products, routes, strengths and units"
+completeness = "SYSTEM 1 percent page sample with REPEATABLE(20261011). Prescriptions are orders, not actual administrations; keyword matches are not frozen inclusion rules."
+
+[[queries]]
+name = "emar_detail_sample"
+file = "sql/profiling/150_emar_detail_sample.sql"
+scope = "aggregate"
+max_rows = 3000
+description = "Sampled product-level eMAR detail vocabulary and parseability"
+completeness = "Independent SYSTEM 0.2 percent page sample with REPEATABLE(20261011), restricted to matching product descriptions. Does not measure complete event parent/product records or prove absent fields for all events."
+
+[[queries]]
+name = "location_vocabulary"
+file = "sql/profiling/160_location_vocabulary.sql"
+scope = "aggregate"
+max_rows = 500
+description = "Complete transfer-location vocabulary and missing-time counts"
+completeness = "Exact counts grouped by eventtype and careunit over transfers; rows are transfers, not independent patients or eligible non-ICU treatment events."
+
+[[queries]]
+name = "omr_vocabulary_sample"
+file = "sql/profiling/170_omr_vocabulary_sample.sql"
+scope = "aggregate"
+max_rows = 500
+description = "Date-level OMR measure vocabulary"
+completeness = "SYSTEM 1 percent page sample with REPEATABLE(20261011). Sample absence does not prove dataset absence; chartdate alone does not establish four-hour pretreatment availability."
+
+[[queries]]
+name = "lab_dictionary_expanded"
+file = "sql/profiling/121_lab_dictionary_expanded.sql"
+scope = "dictionary"
+max_rows = 200
+description = "Expanded lab concept names across all specimen types"
+completeness = "All dictionary labels containing potassium, sodium or creatinine, case-insensitive; candidate discovery only, not a frozen serum-lab mapping."
+
+[[queries]]
+name = "saline_order_profile"
+file = "sql/profiling/180_saline_order_profile.sql"
+scope = "aggregate"
+max_rows = 1000
+description = "Full exact-name 3 percent hypertonic saline prescription audit"
+completeness = "All prescriptions with the exact case-sensitive discovered drug name Sodium Chloride 3% (Hypertonic), all routes. Not exhaustive of all possible product synonyms; orders and packaging are not actual administration. Distinct counts across groups are not additive."
+
+[[queries]]
+name = "saline_emar_profile"
+file = "sql/profiling/181_saline_emar_profile.sql"
+scope = "aggregate"
+max_rows = 1000
+description = "eMAR events linked to deduplicated exact-name saline orders"
+completeness = "All eMAR rows linked by pharmacy_id to the exact-name prescription set. Orders without eMAR are absent; no status, route or location eligibility filter. Counts are candidate records, not final decision events; distinct counts across groups are not additive."
+
+[[queries]]
+name = "saline_complete_details"
+file = "sql/profiling/182_saline_complete_details.sql"
+scope = "aggregate"
+max_rows = 2000
+work_mem_mb = 128
+description = "Full event parent and product detail audit for exact-name saline order-linked eMAR"
+completeness = "All emar_detail rows matching candidate emar_id, without pharmacy_id restriction, plus event-level cardinality including missing details. Products may contain other medications. No numeric doses are combined or normalized. A timeout is a failed query, not partial evidence."
+
+[[queries]]
+name = "saline_location_profile"
+file = "sql/profiling/183_saline_location_profile.sql"
+scope = "aggregate"
+max_rows = 1000
+description = "Event-time versus whole-admission ICU evidence among saline candidate records"
+completeness = "Exact-name order-linked eMAR candidates across all statuses; active transfers use [intime,outtime), excluding discharge events, and eight reviewed ICU unit labels. Remaining named units are provisional non-ICU for exploration. Missing/overlapping locations, order identity disagreements and admission-level invalid intervals stay explicit; no final cohort rule chosen."
+
+[[queries]]
+name = "saline_detail_link_coverage"
+file = "sql/profiling/184_saline_detail_link_coverage.sql"
+scope = "aggregate"
+max_rows = 1000
+description = "Independent pharmacy-to-detail-to-parent link coverage audit"
+completeness = "All exact-name prescription pharmacy IDs linked to detail.pharmacy_id then emar.emar_id; retains orders without matched details. Detail rows are pharmacy-restricted, not complete event details. Cross-group distinct counts are not additive. Tests additional entry-path coverage without treating linked orders as actual saline administrations."
+
+[[queries]]
+name = "potassium_event_detail_sample"
+file = "sql/profiling/190_potassium_event_detail_sample.sql"
+scope = "aggregate"
+max_rows = 2000
+work_mem_mb = 128
+description = "Complete parent/product detail for sampled exact-name potassium eMAR events"
+completeness = "SYSTEM 1 percent eMAR page sample REPEATABLE(20261011), exact trimmed two medication labels across all statuses, linked to all details by emar_id. Not patient-uniform, not full potassium synonym coverage, and not a cohort. Summary, event_shape and detail_vocabulary have distinct denominators; do not sum across sections."
+
+[[queries]]
+name = "saline_sequence_audit"
+file = "sql/profiling/185_saline_sequence_audit.sql"
+scope = "aggregate"
+max_rows = 2000
+work_mem_mb = 128
+description = "Order-linked status sequences, explicit start-stop candidates and dose-field diagnostics"
+completeness = "All eMAR/details linked to exact-name saline orders. Sequences require consistent subject/admission IDs and known charttime, partition by subject/admission/pharmacy, and stop at the next non-Confirmed control record. Same-time ties disqualify integration. Rate-time integrals are diagnostic under a piecewise-constant assumption, not measured actual dose, a final clinical episode, route eligibility or action mapping. Different orders are not merged; endpoint and amount sections have separate denominators."
+
+[[queries]]
+name = "saline_lab_timing"
+file = "sql/profiling/186_saline_lab_timing.sql"
+scope = "aggregate"
+max_rows = 5000
+description = "Candidate saline start/restart anchors, sodium lab availability, units and timestamp ties"
+completeness = "All Started/Delayed Started/Restarted records linked to deduplicated exact-name saline orders. Inventory retains identity problems; lab matching requires consistent subject/admission IDs and known anchor time. Candidate serum sodium items 50983/52623 only: pre window [t-4h,t), observed storetime <= t availability, next sampling time strictly >t without maximum lag, all ties retained. Location is at anchor time, not full treatment/observation eligibility. Presence is not numeric validity; roles overlap and one lab may match multiple anchors. No final cohort or infusion-end outcome rule."
+
+[[queries]]
+name = "saline_order_links"
+file = "sql/profiling/187_saline_order_links.sql"
+scope = "aggregate"
+max_rows = 10000
+work_mem_mb = 32
+description = "Cross-pharmacy POE agreement, control-sequence comparisons and order-discontinuation links"
+completeness = "Exact-name saline prescription candidates; comparisons use consistent subject/admission and known event times. Pharmacy, strictly consistent POE, and admission-wide temporal streams remain separate. Unknown states, ties, omitted identities and unknown times are flagged. POE discontinue pointers describe orders and never supply actual treatment stop times. Same-POE additional eMAR coverage is diagnostic only and is not merged into endpoints. NULL POE records are not pooled; no final event merging or cohort rule adopted."
+
+[[queries]]
+name = "potassium_route_dose_sample"
+file = "sql/profiling/191_potassium_route_dose_sample.sql"
+scope = "aggregate"
+max_rows = 5000
+work_mem_mb = 128
+description = "Complete potassium sample details with independent route identity and dose-duplication evidence"
+completeness = "Same SYSTEM 1 percent seed and two exact trimmed eMAR labels as 190; not population counts. Complete details joined by emar_id; route evidence from head/detail pharmacy and prescriptions is aggregated independently, preserving subject/admission/sequence failures. mL never establishes IV; TAB/PKT conflicts and all statuses remain visible. Repeated product doses are not summed into actual dose. Strict single-product Administered/IV/mEq compatibility is a source candidate only; identity, product meaning, infusion timing, non-ICU and final actions are not collectively validated."
+
+[[queries]]
+name = "saline_closed_windows"
+file = "sql/profiling/188_saline_closed_windows.sql"
+scope = "aggregate"
+max_rows = 5000
+work_mem_mb = 128
+description = "Closed saline candidate intervals, full location coverage, endpoint labs and other start records"
+completeness = "Candidate construction matches 185 exactly; no cross-order merge. Whole treatment and context-plus-treatment windows use atomic transfer intervals; treatment-to-post-end-lab windows exist only when a post-end lab exists. Stop/lab point locations are separate from half-open intervals and retain potentially relevant invalid transfers. Earliest labs strictly after start/end retain all ties and missing numeric values; mEq/L is the diagnostic candidate unit, other nonempty units stay unverified without conversion. Additional starts cover only the exact-drug candidate entry path, not all concurrent treatments; order-linked identity anomalies are retained conservatively even when the event admission is missing or conflicting. Diagnostic first-flag flow is a declared exploratory ordering, not an accepted cohort or verified actual dose. Distinct counts across groups/windows/roles are not additive."
+
+[[queries]]
+name = "saline_order_families"
+file = "sql/profiling/189_saline_order_families.sql"
+scope = "aggregate"
+max_rows = 10000
+work_mem_mb = 32
+description = "Explicit POE replacement graph and actual eMAR endpoint comparisons"
+completeness = "Exact-drug orders with consistent prescription/pharmacy/POE identity form finite connected components using explicit discontinue pointers. Relations describe order lineage, not infusion continuity. Only actual identity-consistent eMAR controls supply endpoints. Reciprocal/one-way edges, cycles, branches, omitted heads, unknown times/statuses, shared-POE extra heads and overlapping record spans remain explicit. Extra same-POE heads are coverage-only and conservatively flag the whole family. Recursive UNION has no silent depth truncation; timeout fails. No actual dose or cohort accepted."

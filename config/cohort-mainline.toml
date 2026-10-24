@@ -1,0 +1,61 @@
+schema_version = 1
+rule_version = "mainline-source-events-v1"
+recorded_on = "2026-10-20"
+status = "adopted_for_source_event_pilot"
+role = "Record of choices implemented in versioned SQL; not runtime SQL parameters"
+author_implementation_recovered = false
+formal_cohort_complete = false
+
+[paper]
+tasks = ["IV potassium", "IV hypertonic 3% saline"]
+setting = "non-ICU"
+context = "pre-treatment four hours; static fields separate (Figure 5)"
+factual_outcome = "next observed corresponding lab"
+potassium_actions = [0, 10, 20, 40]
+sodium_actions = [0, 100, 200, 300, 400, 500]
+
+[potassium_pilot]
+source = "eMAR head-name potassium/KCl/KPhos lexical scope; other evidence paths not yet integrated"
+sampling = "deterministic subject_id modulo; default 100 buckets, bucket 0"
+unit_of_output = "one eMAR head, including excluded heads"
+medication_families = ["potassium_chloride", "potassium_acetate", "potassium_phosphate"]
+dose = "sum distinct product ordinal dose_given in mEq; named non-potassium components reject event; missing product name retains named-head assumption and flag; never add parent dose or use dose_due"
+unsupported_dose = "report and exclude, including phosphate mmol without potassium-equivalent mapping"
+status_required = "Administered"
+completion = "exclude explicit incomplete/remainder and unrecognized flags; missing is unknown, not excluded by itself"
+route = "consistent explicit IV from identity-matched detail/pharmacy/prescription evidence"
+location = "one named non-ICU transfer interval covering eMAR charttime"
+anchor = "eMAR charttime; not asserted to be observed infusion start or end"
+pre_lab = "latest 50971 specimen in [anchor-4h,anchor] whose storetime <= anchor"
+post_lab = "first 50971 specimen in (anchor,anchor+24h]; bad first group not skipped"
+post_storetime = "missing allowed and retained; nonmissing before charttime excluded"
+lab_ties = "all available rows at chosen time retained; usable positive finite value and recognized unit with one unique value required"
+lab_scope_limitation = "50971 only; 52610 not included in this source pilot"
+not_yet_implemented = ["other medication evidence paths", "zero-action opportunities", "episode aggregation", "concurrent treatment disposition", "fifteen features", "three splits"]
+
+[sodium_support]
+source = "all eMAR linked to exact 3% hypertonic saline prescription pharmacy IDs, with identity/other-head flags"
+output = "classified aggregate counts; no action or delivered-volume assumption"
+physical_conversion_meq_per_ml = 0.513
+planned_or_bag_amount_is_delivered_dose = false
+next_volume_path = "direct recorded dose if supported; otherwise explicitly estimated piecewise charted-rate integral over recorded start/stop segments"
+action_discretization = "not yet applied; printed action unit remains mEq"
+
+[sodium_segments]
+source = "all start-like eMAR heads linked to exact 3% saline prescription pharmacy IDs; missing head name inherits consistent exact order, known other drug excluded"
+sequence = "same subject, admission and pharmacy; only next non-Confirmed control may close; must be Stopped or Stopped - Unscheduled"
+volume = "piecewise constant unique parent mL/hr rate times elapsed hours across start/Confirmed/stop; product amounts not added"
+route = "explicit detail IV or IV DRIP, or consistent exact-prescription IV fallback when detail route is missing; explicit non-IV/conflict excludes"
+quantity_is_estimated = true
+physical_conversion_meq_per_ml = 0.513
+location = "one named non-ICU transfer interval at start; entire interval not checked"
+missingness = "missing storetime or completion flag alone does not reject; missing or ambiguous rate does"
+not_yet_implemented = ["other order names or cross-order continuation", "lab outcomes", "zero-action opportunities", "action discretization", "fifteen features", "three splits"]
+
+[execution]
+statement_timeout_ms = 120000
+read_only = true
+max_output_rows_per_query = 10000
+patient_rows_local_only = true
+external_llm_calls = false
+legacy_human_adjudication_required = false

@@ -1,0 +1,48 @@
+{
+  "component_id": "D005-K-QUERY202-PREADJUDICATION-EVIDENCE-v2",
+  "errors": 0,
+  "failures": 0,
+  "implementation_bundle_sha256": {
+    "offline_auditor": "8d748badddb1bbb39fa02995151e5de5463308968811dcf43f0f7657f61e87e9",
+    "runner": "61c6a1d6a422284c5837d6683ef2ce1ed6ca4e314cd7c5d4e92fc181aa248465",
+    "sql": "a6b24a0eaa07e8e616d7ab370b40cdfbc140e2401cc745b05e83825f8aa2403f"
+  },
+  "mutation_classes_passed": [
+    "timeout_or_nonzero_exit",
+    "rollback_or_snapshot_drift",
+    "missing_duplicate_or_cross_bucket",
+    "boundary_set_or_seed_drift",
+    "tuple_or_multiplicity_tamper",
+    "lineage_or_limit_tamper",
+    "permission_or_gitignore_tamper",
+    "public_privacy_leak",
+    "implementation_bundle_drift"
+  ],
+  "schema_version": 1,
+  "scientific_contract_sha256": "243019799faf184cfe237832cce37517fcb15703ff3fefcb7fc2680a167bcbdf",
+  "status": "passed",
+  "test_command": "PYTHONPATH=src:. .venv/bin/python -m unittest tests.test_query202_pre_adjudication_preregistration_v2 tests.test_query202_preadjudication_sql_v2 tests.test_query202_pre_adjudication tests.test_query202_pre_adjudication_audit_v2 tests.test_query202_readonly_explain_attestation -v",
+  "test_files": [
+    {
+      "file_sha256": "bd823783b00a952067989a006e09f08f990a95374a8864b0bffdc712bbed7173",
+      "path": "tests/test_query202_pre_adjudication_preregistration_v2.py"
+    },
+    {
+      "file_sha256": "d026dd3148d5e631f10f497271a629ad25aa97fcce305f228cfc36e523ab1690",
+      "path": "tests/test_query202_preadjudication_sql_v2.py"
+    },
+    {
+      "file_sha256": "28b90528f77eea119329a7369c4c7455510c0f00b89e9222bf28d30168b16d36",
+      "path": "tests/test_query202_pre_adjudication.py"
+    },
+    {
+      "file_sha256": "371d83ba23048bf8f39efe57cb9f346b3beef881eb933f3abb05b5365e0074d5",
+      "path": "tests/test_query202_pre_adjudication_audit_v2.py"
+    },
+    {
+      "file_sha256": "3fc75a40af82335f9cbb7da7c2acdbe2ca88f3b3d78bc86a99551bd59fb6cd1b",
+      "path": "tests/test_query202_readonly_explain_attestation.py"
+    }
+  ],
+  "tests_run": 59
+}

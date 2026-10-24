@@ -1,0 +1,145 @@
+schema_version = 1
+component_id = "D003-K-OUTCOME-v1"
+decision_id = "D003"
+status = "proposed"
+scope = "Positive-dose potassium factual outcome selection only"
+rule_version = "k-observed-outcome-v1-proposed"
+specified_on = "2026-10-11"
+specified_after = "Aggregate timing audit 198"
+specified_before = ["formal cohort extraction", "model training", "LLM patient-data calls", "downstream performance metrics"]
+author_setting_recovered = false
+formal_label_enabled = false
+
+[paper_facts]
+factual_outcome = "serum potassium in the next observed context following treatment administration"
+prompt_assumed_rate_meq_per_hour = 10
+prompt_prediction_hours_after_infusion = 3
+observed_infusion_endpoint_disclosed = false
+observed_label_selector_disclosed = false
+maximum_label_lag_disclosed = false
+concurrent_treatment_rule_disclosed = false
+duplicate_lab_rule_disclosed = false
+
+[primary_rule]
+rule_id = "first-k-after-administration-anchor-within-24h-v1"
+anchor = "emar_administration_record_charttime"
+anchor_is_observed_infusion_start = false
+anchor_is_observed_infusion_end = false
+identity_scope = "same_subject_and_hadm"
+selector = "first_serum_potassium_specimen_timestamp_group_strictly_after_anchor"
+lower_bound = "open"
+upper_bound = "closed"
+maximum_anchor_lag_hours = 24
+choose_timestamp_before_quality_assessment = true
+skip_invalid_first_timestamp_group = false
+supported_itemids = [50971, 52610]
+normalized_unit = "mEq/L"
+require_at_least_one_finite_supported_value = true
+require_one_distinct_finite_normalized_value = true
+allow_duplicate_rows_when_normalized_values_agree = true
+allow_conflicting_finite_values = false
+allow_finite_values_with_unsupported_units = false
+storetime_selects_timestamp = false
+allow_missing_storetime = true
+allow_storetime_before_charttime = false
+selected_lab_group_may_serve_multiple_events = false
+lab_reuse_collision = "exclude"
+exclusion_reasons = [
+  "decision_time_unresolved",
+  "episode_overlap_unresolved",
+  "actual_action_unresolved",
+  "missing_or_cross_admission_identity",
+  "no_lab_within_24h",
+  "additional_treatment_before_outcome",
+  "same_time_treatment_lab_order_unknown",
+  "selected_group_no_finite_supported_value",
+  "selected_group_unit_unrecognized",
+  "selected_group_value_conflict",
+  "reversed_storetime",
+  "lab_reuse_collision",
+]
+
+[concurrent_treatment]
+source_universe = "eventually frozen full accepted IV potassium source universe"
+exclude_distinct_candidate_at_same_anchor = true
+exclude_additional_candidate_after_anchor_through_selected_lab = true
+interval = "(anchor, selected_lab_time]"
+current_sample_coverage_is_complete = false
+
+[prompt_proxy]
+role = "LLM prompt clock and sensitivity analysis only"
+positive_dose_proxy_end = "anchor + normalized_positive_dose_meq / 10 hours"
+positive_dose_prediction_target = "proxy_end + 3 hours"
+proxy_end_is_observed = false
+prediction_target_selects_primary_factual_label = false
+zero_dose_clock_defined = false
+
+[[sensitivity_rules]]
+rule_id = "first-k-after-anchor-within-6h"
+selector = "first_serum_potassium_specimen_timestamp_group_strictly_after_anchor"
+maximum_anchor_lag_hours = 6
+
+[[sensitivity_rules]]
+rule_id = "first-k-after-anchor-within-12h"
+selector = "first_serum_potassium_specimen_timestamp_group_strictly_after_anchor"
+maximum_anchor_lag_hours = 12
+
+[[sensitivity_rules]]
+rule_id = "first-k-after-proxy-end-within-anchor-24h"
+selector = "first_serum_potassium_specimen_timestamp_group_strictly_after_proxy_end"
+maximum_anchor_lag_hours = 24
+
+[[sensitivity_rules]]
+rule_id = "nearest-k-to-proxy-target-strictly-post-proxy-end-within-3h"
+selector = "nearest_serum_potassium_timestamp_group_to_proxy_target_strictly_after_proxy_end"
+maximum_absolute_target_lag_hours = 3
+equidistant_distinct_timestamp_groups = "exclude_as_ambiguous"
+
+[change_control]
+selection_must_not_depend_on = ["label coverage", "model accuracy", "OPE RMSE", "agreement with paper figures"]
+downstream_artifacts_must_record = ["component_id", "rule_version", "config_sha256"]
+changing_primary_rule_invalidates = ["cohort flow", "factual labels", "rewards", "model fits", "LLM factual metrics", "OPE results"]
+
+unresolved_dependencies = [
+  "D005 accepted IV potassium medication universe",
+  "D005 source rows to actual delivered action",
+  "D005 same-anchor episode composition",
+  "D005 zero-action opportunity",
+  "D003 formal decision anchor",
+  "D003 formal non-ICU interval",
+]
+
+[guards]
+formal_cohort_constructed = false
+formal_label_constructed = false
+actual_action_defined = false
+zero_action_defined = false
+episode_rule_defined = false
+non_icu_rule_defined = false
+patient_data_exported = false
+llm_called = false
+
+[[evidence]]
+name = "paper_metadata"
+path = "config/paper.toml"
+file_sha256 = "6653d2d6ef24815a244988dbbba76cf1967eb780941d2c53f608c1765422f2a5"
+source_content_sha256 = "baa887948429d4c24d0b7240688346bf84c840d06983a09a6c6e2c08b8e237d3"
+supports = "Paper identity and frozen source content"
+
+[[evidence]]
+name = "timing_query"
+path = "sql/profiling/198_potassium_assumed_rate_lab_timing.sql"
+file_sha256 = "d6f2747939bffc18cf51a7c49221371e912b9178b84cad0ed2df7318d8dfd988"
+supports = "Diagnostic selector definitions and guard flags"
+
+[[evidence]]
+name = "timing_manifest"
+path = "artifacts/profiling/20261011T124640.558143Z/manifest.json"
+file_sha256 = "fbbbbe7635b97b496211c5aa7baac0c41d00a85b0ef2973ab749ffc1843f8e4c"
+supports = "Read-only execution scope, SQL hash, output hash, and row count"
+
+[[evidence]]
+name = "timing_audit"
+path = "artifacts/profiling/20261011T124640.558143Z/audit-summary.json"
+file_sha256 = "517a303552f567dffd0c26144b03da889cf6146c8e6986243c8c3e4b23d34db5"
+supports = "Aggregate conservation and 44,970 independent assertions"

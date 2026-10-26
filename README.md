@@ -6,6 +6,12 @@ The implementation compares the direct method (DM) with DM+, which augments a li
 
 **The Git checkout contains code, synthetic tests, and aggregate results. The complete restricted reproduction bundle is provided separately as an attachment to the [private baseline-data release](https://github.com/adlee1/Healthcare-OPE/releases/tag/baseline-data-2026-10-24).** A clone can run tests and render aggregate figures; both `cached` and `fresh` clinical reproduction require downloading and extracting that bundle. Access is limited to appropriately authorized collaborators covered by the repository owner's confirmed permission. See [data access](docs/DATA_ACCESS.md).
 
+## Read the code and locate models
+
+Start with the **[code navigation guide](docs/CODE_GUIDE.md)** for model locations, function calls, saved model files, and which program to run. The **[complete Python symbol index](docs/FUNCTION_INDEX.md)** links every named function, class, and method to its implementation. Detailed guides cover [model/evaluation code](docs/MODEL_CODE.md), [execution entry points](docs/RUNNERS.md), and [LLM configuration/adapters](docs/LLM_CODE.md).
+
+The portable baseline runner imports frozen code from the downloaded bundle's `src/`. Editing this checkout's `src/` will not change that runner's numerical implementation; use a separate development entry point for a new method, as described in the code guide.
+
 ## Selected development baselines
 
 These two cases were selected after inspecting the results. They are useful development baselines, not prospectively selected independent test sets.
